@@ -5,6 +5,7 @@ const ajax = require('../common/ajax-functions.js');
 const https = require('https'),
       fs = require('fs'),
       stream = require('stream');
+      //Buffer = require('buffer');
 
 function apiHandler() {
   this.getStocks = (req, res) => {
@@ -14,8 +15,21 @@ function apiHandler() {
     https.get(url, {contentType: 'json'}, function(res) {
       
       res.on('data', (d) => {
-        //let obj = JSON.parse(d);
-        console.log(d)
+        const buff = Buffer.from(d)
+        //const json = JSON.stringify(buff);
+        //const buf = Buffer.from([0x1, 0x2, 0x3, 0x4, 0x5]);
+const json = JSON.stringify(buff);
+
+//console.log(json);
+// Prints: {"type":"Buffer","data":[1,2,3,4,5]}
+
+const copy = JSON.parse(json, (key, value) => {
+  return value && value.type === 'Buffer' ?
+    Buffer.from(value.data) :
+    value;
+});
+
+console.log(copy);
       });
       
     });
