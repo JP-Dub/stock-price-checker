@@ -20,9 +20,11 @@ app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'none'"],
-    scriptSrc : ["'self'"],
-    styleSrc  : ["'self'"]
+    defaultSrc: ["'self'", 'glitch.me'],
+    scriptSrc : ["'self'", 'https://code.jquery.com'], //https://code.jquery.com
+    styleSrc  : ["'self'"],
+    imgSrc    : ["'self'"],
+    connectSrc: ["'self'"]
   }
 }));
 
