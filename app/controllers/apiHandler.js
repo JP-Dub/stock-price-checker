@@ -11,18 +11,14 @@ function apiHandler() {
     console.log(req.query)
     let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo'
     
-//     https.get(url, function(res) {
-      
-//       res.on('data', (d) => {
-//         console.log(fs.createReadStream(d))
-//       });
-      
-//     });
-    https.get(url).on('data', (res) => {
+    https.get(url, {type: 'json'}, function(res) {
       console.log(res)
-    }).catch(err => {
-      console.log(err)
-    })
+      res.on('data', (d) => {
+        console.log(fs.createReadStream(d))
+      });
+      
+    });
+
     
   }
 
