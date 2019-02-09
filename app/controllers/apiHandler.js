@@ -1,17 +1,17 @@
 'use strict';
 
 const apiKey = process.env.API_KEY;
-const ajax = require('../common/ajax-functions.js');
-const https = require('https'),
-      fs = require('fs'),
-      stream = require('stream');
-      //Buffer = require('buffer');
+const https = require('https');
 
 function apiHandler() {
+  
   this.getStocks = (req, res) => {
-    console.log(req.query)
-    let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     
+    let symbol = req.query.stock,
+        url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
+    
+    //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
+     
     https.get(url, (res) => {
       const { statusCode } = res;
       const contentType = res.headers['content-type'];
@@ -42,9 +42,9 @@ function apiHandler() {
           console.error(e.message);
         }
       });
-  }).on('error', (e) => {
-    console.error(`Got error: ${e.message}`);
-  });
+    }).on('error', (e) => {
+      console.error(`Got error: ${e.message}`);
+    }); // end of https request
 
     
   };
