@@ -18,6 +18,10 @@ app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
+app.use(helmet({
+  
+}));
+
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true});
 mongoose.Promise = global.Promise;
 
