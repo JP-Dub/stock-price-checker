@@ -20,11 +20,11 @@ app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    defaultSrc: ["'self'", 'glitch.me'],
-    scriptSrc : ["'self'", 'https://code.jquery.com'], //https://code.jquery.com
-    styleSrc  : ["'self'"],
-    imgSrc    : ["'self'"],
-    connectSrc: ["'self'"]
+    'default-src': ["'self'", 'https://stock-price-checkr.glitch.me/',  'https://hyperdev.com/favicon-app.ico'],
+    scriptSrc : ["'self'", "'unsafe-inline'", "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", 'https://stock-price-checkr.glitch.me/'], //https://code.jquery.com
+    //styleSrc  : ["'self'", 'https://stock-price-checkr.glitch.me/'],
+    //'img-src'    : ["'self'", 'https://stock-price-checkr.glitch.me/', 'https://hyperdev.com/favicon-app.ico'],
+   // connectSrc: ["'self'"]
   }
 }));
 
