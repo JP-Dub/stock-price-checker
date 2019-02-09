@@ -8,6 +8,8 @@
 
 'use strict';
 
+let ApiHandler = require('../app/controllers/apiHandler');
+
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
 
