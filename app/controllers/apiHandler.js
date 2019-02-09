@@ -1,5 +1,5 @@
 'use strict';
-/* global $, ajax */
+
 const apiKey = process.env.API_KEY;
 const ajax = require('../common/ajax-functions.js');
 
