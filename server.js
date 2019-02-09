@@ -18,8 +18,12 @@ app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
-app.use(helmet({
-  
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'none'"],
+    scriptSrc : ["'self'"],
+    styleSrc  : ["'self'"]
+  }
 }));
 
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true});
