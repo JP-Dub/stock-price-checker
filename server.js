@@ -20,10 +20,10 @@ app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
-    'default-src': ["'self'", 'https://stock-price-checkr.glitch.me/',  'https://hyperdev.com/favicon-app.ico'],
-    scriptSrc : ["'self'", "'unsafe-inline'", "sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", 'https://stock-price-checkr.glitch.me/'], //https://code.jquery.com
-    //styleSrc  : ["'self'", 'https://stock-price-checkr.glitch.me/'],
-    //'img-src'    : ["'self'", 'https://stock-price-checkr.glitch.me/', 'https://hyperdev.com/favicon-app.ico'],
+    defaultSrc: ['*']//"'self'", 'https://stock-price-checkr.glitch.me/',  'https://hyperdev.com/favicon-app.ico'],
+   //  scriptSrc : ["'self'", "'unsafe-inline'","sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=", 'https://stock-price-checkr.glitch.me/'], //https://code.jquery.com
+   //  styleSrc  : ["'self'", 'https://stock-price-checkr.glitch.me/'],
+   //  imgSrc    : ["'self'", 'https://stock-price-checkr.glitch.me/', 'https://hyperdev.com/favicon-app.ico'],
    // connectSrc: ["'self'"]
   }
 }));
@@ -44,7 +44,7 @@ app.route('/')
 fccTestingRoutes(app);
 
 //Routing for API 
-apiRoutes(app);  
+apiRoutes(app, helmet);  
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
