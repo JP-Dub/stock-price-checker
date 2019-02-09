@@ -19,14 +19,14 @@ app.use('/public', express.static(process.cwd() + '/public'));
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(helmet());
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc : ["'self'", "'unsafe-inline'","sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="], //https://code.jquery.com
-     styleSrc  : ["'self'", "'unsafe-inline'", ],
-     imgSrc    : ["'self'", 'https://stock-price-checkr.glitch.me/', 'https://hyperdev.com/favicon-app.ico'],
-    connectSrc: ["'self'"]
-  }
+  app.use(helmet.contentSecurityPolicy({
+    directives : {
+        defaultSrc: ["'self'"],
+        scriptSrc : ["'self'", "'unsafe-inline'"], //https://code.jquery.com
+        styleSrc  : ["'self'", "'unsafe-inline'" ],
+        imgSrc    : ["'self'", "'unsafe-inine'" ],
+        connectSrc: ["'self'"]
+    }
 }));
 
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true});
