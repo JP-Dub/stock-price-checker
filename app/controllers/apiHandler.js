@@ -10,35 +10,44 @@ const https = require('https'),
 function apiHandler() {
   this.getStocks = (req, res) => {
     console.log(req.query)
-    let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=demo'
+    let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     
-    https.get(url, {contentType: 'application/json; charset=utf-8'}, function(res, success) {
-      console.log(res, success)
-      res.on('data', (d) => {
-        console.log(d)
-        const buff = Buffer.from(d)
-        //const json = JSON.stringify(buff);
-        //const buf = Buffer.from([0x1, 0x2, 0x3, 0x4, 0x5]);
-       const json = JSON.stringify(buff);
+    https.get(url, (res) => {
+      const { statusCode } = res;
+      const contentType = res.headers['content-type'];
 
-//console.log(json);
-// Prints: {"type":"Buffer","data":[1,2,3,4,5]}
+      let error;
+      if (statusCode !== 200) {
+        error = new Error('Request Failed.\n' +
+                          `Status Code: ${statusCode}`);
+      } else if (!/^application\/json/.test(contentType)) {
+        error = new Error('Invalid content-type.\n' +
+                          `Expected application/json but received ${contentType}`);
+      }
+      if (error) {
+        console.error(error.message);
+        // consume response data to free up memory
+        res.resume();
+        return;
+      }
 
-const copy = JSON.parse(json, (key, value) => {
-  return value && value.type === 'Buffer' ?
-    Buffer.from(value.data) :
-    value;
-});
-
-//console.log(copy);
+      res.setEncoding('utf8');
+      let rawData = '';
+      res.on('data', (chunk) => { rawData += chunk; });
+      res.on('end', () => {
+        try {
+          const parsedData = JSON.parse(rawData);
+          console.log(parsedData);
+        } catch (e) {
+          console.error(e.message);
+        }
       });
-      
-    });
+  }).on('error', (e) => {
+    console.error(`Got error: ${e.message}`);
+  });
 
     
-  }
-
-
-}
+  };
+};
 
 module.exports = apiHandler;
