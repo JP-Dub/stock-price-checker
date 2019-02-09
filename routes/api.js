@@ -8,7 +8,7 @@
 
 'use strict';
 
-let ApiHandler = require('../app/controllers/apiHandler');
+const ApiHandler = require('../app/controllers/apiHandler.js');
 
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
@@ -17,10 +17,9 @@ const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRIN
 
 module.exports = function (app) {
 
-
+  let apiHandler = new ApiHandler();
+  
   app.route('/api/stock-prices')
-    .get(function (req, res){
-      console.log(req.params, req.body, req.query);
-    });
+    .get(apiHandler.getStocks)
     
 };
