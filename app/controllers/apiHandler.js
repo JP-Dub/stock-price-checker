@@ -6,12 +6,12 @@ const https = require('https');
 function apiHandler() {
   
   this.getStocks = (req, res) => {
-    
+    console.log(req.query)
     let symbol = req.query.stock,
         url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
     
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
-     
+  const checkStock   
     https.get(url, (res) => {
       const { statusCode } = res;
       const contentType = res.headers['content-type'];
