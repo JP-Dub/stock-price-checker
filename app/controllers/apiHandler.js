@@ -10,7 +10,7 @@ const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRIN
 function apiHandler() {
   
   this.getStocks = (req, res) => {
-    console.log(req.clientIp, req.query) 
+    //console.log(req.clientIp, req.query) 
      let stockData = [],
          symbol;      
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
@@ -49,7 +49,7 @@ function apiHandler() {
       }).on('error', (e) => {
         console.error(`Got error: ${e.message}`);
       }); // end of https request
-    };
+    }; // end of stockPrices()
               
     const queryIpDb = (arr, callback) => {
       //console.log(symbol)
@@ -92,16 +92,17 @@ function apiHandler() {
       symbol.push(req.query.stock)
       );
     
-    let ticker, price;
+    //let ticker, price;
     symbol.forEach( (val, idx, arr) => {    
       
       stockPrices(val, function done(stock) {
-        ticker = stock['Global Quote']['01. symbol'],
-        price  = stock['Global Quote']['05. price'];
+        console.log('stock', stock)
+        let ticker = stock['Global Quote']['01. symbol'],
+            price  = stock['Global Quote']['05. price'];
         stockData.push({ 'stock': ticker, 'price': price });
-        
+        console.log(stockData, ticker, price)
         if(!arr.length-1) {
-          stockData[0]['likes'] = 0;
+          stockData[idx]['likes'] = 1;
         } else {    
           stockData[idx]['rel_likes'] = 0;              
         }
@@ -109,7 +110,7 @@ function apiHandler() {
         if (idx === arr.length-1) {
           
           queryIpDb(arr, function callback(db) {
-            console.log('database', db);
+            console.log('callback');
                       
 
             return res.json({stockData})
