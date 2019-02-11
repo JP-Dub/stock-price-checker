@@ -79,16 +79,16 @@ function apiHandler() {
           if(err) throw err;
             likes.forEach( (err, item) => {
                 // watch for both errors and the end of the data
-                if (err || !item) {
-                    // display (or do something more interesting) with the error
-                    if (err) console.log('error walking data, err = ', err);
-                    // close the connection when done OR on error
-                    client.close();
-                    return;
-                }
-              callback(item);
+                // if (err || !item) {
+                //     // display (or do something more interesting) with the error
+                //     if (err) console.log('error walking data, err = ', err);
+                //     // close the connection when done OR on error
+                //     client.close();
+                //     return;
+                // }
+              callback(err||item);
             });
-         
+         //callback(likes);
         });
 
        
@@ -137,7 +137,10 @@ function apiHandler() {
               response = stockData[0];
               response['likes'] = 0;
             } else {
-              stockData.forEach( (obj  
+              stockData.forEach( (obj, index) => {
+                obj['rel_likes'] = 0;            
+              });
+              response = stockData;
             }
                       
             return res.json({stockData : response})
