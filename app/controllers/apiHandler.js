@@ -60,12 +60,12 @@ function apiHandler() {
            
         //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
     MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
-      if(err) throw err; 
-          
+      if(err) throw err;          
       
       let db  = client.db('mlab'),
       library = db.collection('stock-prices');
-            
+      
+      if(req.query.like) {
       library.findOne({userIp : req.clientIp }, function(err, ip) {
         if(err) throw err;
               
@@ -77,6 +77,9 @@ function apiHandler() {
         } else {
             console.log(ip)
         }
+      }
+        
+        
             
       });//findOne
       //}
