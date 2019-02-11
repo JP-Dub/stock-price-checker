@@ -92,23 +92,24 @@ function apiHandler() {
       symbol.push(req.query.stock)
       );
     
+    function isEmpty(obj) {
+      for(var key in obj) {
+        if(obj.hasOwnProperty(key)) return false;
+      }
+      return true;
+    };
+    
     //let ticker, price;
     symbol.forEach( (val, idx, arr) => {    
       
-      stockPrices(val, function done(stock) {
-        console.log('stock', stock['Global Quote'])
-        function isEmpty(obj) {
-          for(var key in obj) {
-            if(obj.hasOwnProperty(key)) return false;
-          }
-          return true;
-        };
-        
+      stockPrices(val, function done(data) {
+        let stock = data['Global Quote'];
+              
         if(isEmpty(stock)) {
           stockData.push({'error' : 'Unable to find ticker'});
         } else {
-        let ticker = stock['Global Quote']['01. symbol'],
-            price  = stock['Global Quote']['05. price'];
+        let ticker = stock['01. symbol'],
+            price  = stock['05. price'];
         stockData.push({ 'stock': ticker, 'price': price });
         console.log(stockData, ticker, price)
         if(!arr.length-1) {
