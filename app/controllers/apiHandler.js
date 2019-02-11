@@ -61,12 +61,12 @@ function apiHandler() {
         
         if(req.query.like) {
            //"98.254.191.29"
-          var clientIp =  "101.254.191.29"
+          var clientIp =  "100.255.191.29"
           library.findOne({userIp : clientIp }, function(err, ip) {
             if(err) throw err;
 
             if(!ip) {
-              library.insertOne({userIp: req.clientIp, likes: arr}, (err, result) => {
+              library.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
                if(err) throw err;
                  //console.log('insertOne result', result);
                  //callback(result)
@@ -76,8 +76,10 @@ function apiHandler() {
             
           });
         }// if(req.query.like)
-        
-        library.find({}).forEach( (likes) => {
+        let arr = [];
+        library.find({}).forEach( (doc) => {
+          console.log(doc)
+             arr.push(doc.likes) 
           
             //likes.forEach( (err, item) => {
                 // watch for both errors and the end of the data
@@ -88,11 +90,11 @@ function apiHandler() {
                 //     client.close();
                 //     return;
                 // }
-              callback(likes);
+              
             //});
-         //callback(likes);
+       callback(arr);
         });
-
+        
        
       }); // MongoClient()
     };    
