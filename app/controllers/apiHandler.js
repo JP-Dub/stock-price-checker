@@ -51,7 +51,7 @@ function apiHandler() {
     };
     
     
-    let stockData = [],
+    let stockData = [].slice(),
         symbol;
         
     Array.isArray(req.query.stock) ? symbol = req.query.stock 
@@ -59,6 +59,7 @@ function apiHandler() {
     
            
     const queryIpDb = (symbol, callback) => {
+      console.log(symbol)
       MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
         if(err) throw err;          
 
@@ -70,7 +71,7 @@ function apiHandler() {
             if(err) throw err;
 
             if(!ip) {
-              library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
+              library.insertOne({userIp: req.clientIp, likes: symbol}, (err, result) => {
                 if(err) throw err;
                   console.log('insertOne result', result);
                 });
@@ -87,7 +88,7 @@ function apiHandler() {
       }); // MongoClient()
     };    
     
-    symbol.forEach( (val, idx) => {   
+    symbol.forEach( (val, idx, arr) => {   
       let ticker, price;
       
       stockPrices(val, function done(stock) {
@@ -98,14 +99,13 @@ function apiHandler() {
         if(symbol.length < 1) {
           stockData['likes'] = 0;
         } else {    
-          stockData[              
+          stockData['rel_likes'] = 0;              
         }
         
         if (idx === symbol.length-1) {
-          queryIpDb(symbol, function callback(db) {
+          queryIpDb(arr, function callback(db) {
             console.log('db', db);
-            
-            
+                      
 
             return res.json({stockData})
           });//queryIpDb
