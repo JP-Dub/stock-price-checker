@@ -66,8 +66,8 @@ function apiHandler() {
             if(!ip) {
               library.insertOne({userIp: req.clientIp, likes: arr}, (err, result) => {
                if(err) throw err;
-                 console.log('insertOne result', result);
-                 callback(result)
+                 //console.log('insertOne result', result);
+                 //callback(result)
              });
              
             } 
@@ -75,34 +75,38 @@ function apiHandler() {
           });
         }// if(req.query.like)
 
-        // library.find({}, {_id:0, likes: 1}, (err, likes) => {
-        //   if(err) throw err;
-        //   callback(likes);
-        //   //client.close();
-        // });
+        library.find({}, {_id:0, likes: 1}, (err, likes) => {
+          if(err) throw err;
+          callback(likes);
+          //client.close();
+        });
 
        
       }); // MongoClient()
     };    
                 
-    Array.isArray(req.query.stock) ? symbol = req.query.stock 
-                                   : symbol = [], symbol.push(req.query.stock);
-    console.log(symbol)
-    symbol.forEach( (val, idx, arr) => {   
-      let ticker, price;
+    Array.isArray(req.query.stock) ? (
+      symbol = req.query.stock 
+      ):(
+      symbol = [], 
+      symbol.push(req.query.stock)
+      );
+    
+    let ticker, price;
+    symbol.forEach( (val, idx, arr) => {    
       
       stockPrices(val, function done(stock) {
         ticker = stock['Global Quote']['01. symbol'],
         price  = stock['Global Quote']['05. price'];
         stockData.push({ 'stock': ticker, 'price': price });
         
-        if(symbol.length < 1) {
-          stockData['likes'] = 0;
+        if(!arr.length-1) {
+          stockData[0]['likes'] = 0;
         } else {    
-          stockData['rel_likes'] = 0;              
+          stockData[idx]['rel_likes'] = 0;              
         }
         
-        if (idx === symbol.length-1) {
+        if (idx === arr.length-1) {
           
           queryIpDb(arr, function callback(db) {
             console.log('database', db);
