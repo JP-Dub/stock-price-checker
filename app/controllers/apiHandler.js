@@ -60,7 +60,9 @@ function apiHandler() {
         library = db.collection('stock-prices');
         
         if(req.query.like) {
-          library.findOne({userIp : req.clientIp }, function(err, ip) {
+           //"98.254.191.29"
+          var clientIp =  "101.254.191.29"
+          library.findOne({userIp : clientIp }, function(err, ip) {
             if(err) throw err;
 
             if(!ip) {
@@ -74,9 +76,9 @@ function apiHandler() {
             
           });
         }// if(req.query.like)
-
-        library.find({},{_id: 0, likes: 1}).toArray( (err, likes) => {
-          if(err) throw err;
+        
+        library.find({}).forEach( (likes) => {
+          
             //likes.forEach( (err, item) => {
                 // watch for both errors and the end of the data
                 // if (err || !item) {
