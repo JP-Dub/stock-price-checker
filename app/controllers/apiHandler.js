@@ -96,7 +96,17 @@ function apiHandler() {
     symbol.forEach( (val, idx, arr) => {    
       
       stockPrices(val, function done(stock) {
-        console.log('stock', stock)
+        console.log('stock', stock['Global Quote'])
+        function isEmpty(obj) {
+          for(var key in obj) {
+            if(obj.hasOwnProperty(key)) return false;
+          }
+          return true;
+        };
+        
+        if(isEmpty(stock)) {
+          stockData.push({'error' : 'Unable to find ticker'});
+        } else {
         let ticker = stock['Global Quote']['01. symbol'],
             price  = stock['Global Quote']['05. price'];
         stockData.push({ 'stock': ticker, 'price': price });
@@ -106,7 +116,7 @@ function apiHandler() {
         } else {    
           stockData[idx]['rel_likes'] = 0;              
         }
-        
+        }
         if (idx === arr.length-1) {
           
           queryIpDb(arr, function callback(db) {
