@@ -12,7 +12,7 @@ function apiHandler() {
   this.getStocks = (req, res) => {
     console.log(req.clientIp, req.query) 
      let stockData = [],
-         symbol =[];      
+         symbol;      
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     const stockPrices = (symbol, done) =>{   
       let url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
@@ -84,11 +84,10 @@ function apiHandler() {
        
       }); // MongoClient()
     };    
-    
-            
+                
     Array.isArray(req.query.stock) ? symbol = req.query.stock 
                                    : symbol = [], symbol.push(req.query.stock);
-    
+    console.log(symbol)
     symbol.forEach( (val, idx, arr) => {   
       let ticker, price;
       
@@ -104,7 +103,7 @@ function apiHandler() {
         }
         
         if (idx === symbol.length-1) {
-          console.log(
+          
           queryIpDb(arr, function callback(db) {
             console.log('database', db);
                       
