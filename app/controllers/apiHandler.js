@@ -48,7 +48,7 @@ function apiHandler() {
       }); // end of https request
     };
     
-    let stockData = [];
+    //let stockData = [];
     Array.isArray(symbol) ? symbol.forEach( (val, idx) => {                           
         stockPrices(val, function done(stock) {
           let ticker = stock['Global Quote']['01. symbol'],
@@ -66,7 +66,22 @@ function apiHandler() {
           return res.json({stockData});
       });
     
-    if(!Array.isArray(symbol)) 
+    let stockData = [],
+        symbol;
+        
+    Array.isArray(req.query.stock) ? symbol = req.query.stock 
+                                   : symbol = [], symbol.push(req.query.stock);
+    
+    symbol.forEach( (val, idx) => {                           
+        stockPrices(val, function done(stock) {
+          let ticker = stock['Global Quote']['01. symbol'],
+              price  = stock['Global Quote']['05. price'];
+          console.log(ticker, price)
+          stockData.push({'stock': ticker, 'price': price, 'rel_like' : -1});
+        
+         if (idx === symbol.length-1) return res.json({stockData})
+          
+        });
 
     
   };
