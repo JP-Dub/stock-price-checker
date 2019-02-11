@@ -57,43 +57,42 @@ function apiHandler() {
     Array.isArray(req.query.stock) ? symbol = req.query.stock 
                                    : symbol = [], symbol.push(req.query.stock);
     
+           
+        //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
+    MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
+      if(err) throw err; 
+          
+      
+      let db  = client.db('mlab'),
+      library = db.collection('stock-prices');
+            
+      library.findOne({userIp : req.clientIp }, function(err, ip) {
+        if(err) throw err;
+              
+        if(!ip) {
+          library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
+            if(err) throw err;
+              console.log('result');
+            })
+        } else {
+            console.log(ip)
+        }
+            
+      });//findOne
+      //}
+          
+      client.close();
+    }); // MongoClient()
+        
     symbol.forEach( (val, idx) => {                           
       //stockPrices(val, function done(stock) {
-        // let ticker = stock['Global Quote']['01. symbol'],
-        //     price  = stock['Global Quote']['05. price'];
-                  
-        //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
-        MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
-          if(err) throw err; 
-          
-          //if(req.query.like) {
-            let db      = client.db('mlab'),
-                library = db.collection('stock-prices');
-            
-            library.findOne({userIp : req.clientIp }, function(err, ip) {
-              if(err) throw err;
-              
-              if(!ip) {
-               // library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
-               //   if(err) throw err;
-               //   console.log('result');
-               //})
-              } else {
-                console.log(ip)
-              }
-            
-            });//findOne
-          //}
-          
-          client.close();
-        }); // MongoClient()
+      // let ticker = stock['Global Quote']['01. symbol'],
+      //     price  = stock['Global Quote']['05. price'];
+      //stockData.push({ 'stock': ticker, 'price': price });
         
-        
-        //stockData.push({ 'stock': ticker, 'price': price });
-        
-        if (idx === symbol.length-1) return res.json({stockData})
+      if (idx === symbol.length-1) return res.json({stockData})
           
-       // });//stockPrices
+      // });//stockPrices
     });
 
     
