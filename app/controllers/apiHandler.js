@@ -58,7 +58,7 @@ function apiHandler() {
                                    : symbol = [], symbol.push(req.query.stock);
     
            
-        //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
+  
     MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
       if(err) throw err;          
       
@@ -72,13 +72,11 @@ function apiHandler() {
           if(!ip) {
             library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
               if(err) throw err;
-                console.log('result');
-              })
-          } else {
-              console.log(ip)
-          };
+                console.log('insertOne result', result);
+              });
+          } 
         });
-      }
+      }// if(req.query.like)
       
       library.find({}, {likes: 1}, (err, likes) => {
         if(err) throw err;
@@ -89,19 +87,25 @@ function apiHandler() {
       client.close();
     }); // MongoClient()
         
-    symbol.forEach( (val, idx) => {                           
-      //stockPrices(val, function done(stock) {
-      // let ticker = stock['Global Quote']['01. symbol'],
-      //     price  = stock['Global Quote']['05. price'];
-      //stockData.push({ 'stock': ticker, 'price': price });
+    symbol.forEach( (val, idx) => {   
+      let ticker, price;
+      
+      stockPrices(val, function done(stock) {
+        ticker = stock['Global Quote']['01. symbol'],
+        price  = stock['Global Quote']['05. price']; 
+      });//stockPrices
+                
+      stockData.push({ 'stock': ticker, 'price': price });
+      
         
       if (idx === symbol.length-1) return res.json({stockData})
-          
-      // });//stockPrices
-    });
+      
+    });//symbol.forEach()
 
     
   };
 };
 
 module.exports = apiHandler;
+
+      //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
