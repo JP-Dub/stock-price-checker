@@ -67,8 +67,8 @@ function apiHandler() {
           if(err) throw err;
           
           let db      = client.db('mlab'),
-              library = db.collection('users');
-          library.find(, function(err, ip) {
+              library = db.collection('stock-prices');
+          library.find({userIp : req.clientIp}, function(err, ip) {
             if(err) throw err;
             console.log('ip', ip);
           })
