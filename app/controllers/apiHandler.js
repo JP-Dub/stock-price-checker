@@ -38,7 +38,7 @@ function apiHandler() {
         res.on('end', () => {
           try {
             const parsedData = JSON.parse(rawData);
-            console.log(parsedData);
+            //console.log(parsedData);
             done(parsedData);
           } catch (e) {
             console.error(e.message);
@@ -49,15 +49,18 @@ function apiHandler() {
       }); // end of https request
     };
     
-    Array.isArray(symbol) ? symbol.forEach( val => {
-                                        
-                              stockPrices(val, function done(stock) {
-                                console.log(stock)
-                              });
-                            })
-                            : stockPrices(symbol, function done(stock) {
-                                 console.log(stock)
-                              });
+    let arr = [];
+    Array.isArray(symbol) ? symbol.forEach( (val, idx) => {                           
+        stockPrices(val, function done(stock) {
+          arr.push(stock);
+          console.log(arr)
+        });
+      })
+      : stockPrices(symbol, function done(stock) {
+          arr = [];
+          arr.push(stock);
+      });
+
     
   };
 };
