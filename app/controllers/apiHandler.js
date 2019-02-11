@@ -76,24 +76,14 @@ function apiHandler() {
             
 //           });
 //         }// if(req.query.like)
-        let arr = [];
-        library.find({}, (doc) => {
-          console.log(doc)
-         
+        
+        library.find({}, {_id: 0, likes: 1}).forEach((stuff => {
+          console.log(stuff.likes)
           
-            docs.forEach( (item) => {
-                //watch for both errors and the end of the data
-                if (err || !item) {
-                    // display (or do something more interesting) with the error
-                    if (err) console.log('error walking data, err = ', err);
-                    // close the connection when done OR on error
-                    client.close();
-                    return;
-                }
-              
-            });
-        callback(doc)
-        });
+        }));
+        
+        
+        
         
         
        
