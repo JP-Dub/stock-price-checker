@@ -65,18 +65,21 @@ function apiHandler() {
 
             if(!ip) {
               library.insertOne({userIp: req.clientIp, likes: symbol}, (err, result) => {
-                if(err) throw err;
-                 // console.log('insertOne result', result);
-                });
+               if(err) throw err;
+                 console.log('insertOne result', result);
+                 callback(result)
+             });
+             
             } 
+            
           });
         }// if(req.query.like)
 
-        library.find({}, {likes: 1}, (err, likes) => {
-          if(err) throw err;
-          callback(likes);
-          //client.close();
-        });
+        // library.find({}, {_id:0, likes: 1}, (err, likes) => {
+        //   if(err) throw err;
+        //   callback(likes);
+        //   //client.close();
+        // });
 
        
       }); // MongoClient()
