@@ -58,7 +58,7 @@ function apiHandler() {
 
         let db  = client.db('mlab'),
         library = db.collection('stock-prices');
-        console.log('req.like', req.query.like)
+        
         if(req.query.like) {
           library.findOne({userIp : req.clientIp }, function(err, ip) {
             if(err) throw err;
@@ -75,11 +75,20 @@ function apiHandler() {
           });
         }// if(req.query.like)
 
-        library.find({}, (err, likes) => {
+        library.find({},{_id: 0, likes: 1}, (err, likes) => {
           if(err) throw err;
-          console.log('likes', likes);
-          callback(likes);
-          //client.close();
+            likes.forEach( (err, item) => {
+                // watch for both errors and the end of the data
+                if (err || !item) {
+                    // display (or do something more interesting) with the error
+                    if (err) console.log('error walking data, err = ', err);
+                    // close the connection when done OR on error
+                    client.close();
+                    return;
+                }
+              callback(item);
+            });
+         
         });
 
        
@@ -123,7 +132,7 @@ function apiHandler() {
         if (idx === arr.length-1) {
           
           queryIpDb(arr, function callback(db) {
-            console.log('callback');
+            console.log('callback', db);
                       
             return res.json({stockData})
           });//queryIpDb
