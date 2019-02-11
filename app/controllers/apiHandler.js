@@ -77,11 +77,11 @@ function apiHandler() {
                  console.log('result');
                })
               }
-              client.close();
+            
             })
           }
           
-          
+          client.close();
         }); // MongoClient()
         
         
