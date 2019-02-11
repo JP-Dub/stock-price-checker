@@ -66,20 +66,23 @@ function apiHandler() {
         MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
           if(err) throw err; 
           
-          let db      = client.db('mlab'),
-              library = db.collection('stock-prices');
-          library.findOne({
-            query: { userIp : req.clientIp },
-            projection: 
-            { _id: 0 },
-            upsert: true
-            }, function(err, ip) {
-            if(err) throw err;
-            console.log('ip', ip);
-          })
+          if(req.query.like) {
+            let db      = client.db('mlab'),
+                library = db.collection('stock-prices');
+            library.findOne({userIp : req.clientIp }, function(err, ip) {
+              if(err) throw err;
+              if(!ip) {
+               library.insertOne({userIp: req.clientIp, ticker: ticker}, (err, result) => {
+                 if(err) throw err;
+                 console.log('result');
+               })
+              }
+              client.close();
+            })
+          }
           
           
-        });
+        }); // MongoClient()
         
         
         stockData.push({ 'stock': ticker, 'price': price });
