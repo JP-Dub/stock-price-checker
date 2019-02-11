@@ -75,9 +75,9 @@ function apiHandler() {
           });
         }// if(req.query.like)
 
-        library.find({},{_id: 0, likes: 1}, (err, likes) => {
+        library.find({},{_id: 0, likes: 1}).toArray( (err, likes) => {
           if(err) throw err;
-            likes.forEach( (err, item) => {
+            //likes.forEach( (err, item) => {
                 // watch for both errors and the end of the data
                 // if (err || !item) {
                 //     // display (or do something more interesting) with the error
@@ -86,8 +86,8 @@ function apiHandler() {
                 //     client.close();
                 //     return;
                 // }
-              callback(err||item);
-            });
+              callback(likes);
+            //});
          //callback(likes);
         });
 
