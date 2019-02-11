@@ -11,6 +11,7 @@ var runner            = require('./test-runner');
 
 let helmet   = require('helmet'),
     mongoose = require('mongoose');
+     requestIp = require('request-ip');
 
 var app = express();
 
@@ -43,7 +44,7 @@ app.route('/')
 fccTestingRoutes(app);
 
 //Routing for API 
-apiRoutes(app, helmet);  
+apiRoutes(app);  
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {

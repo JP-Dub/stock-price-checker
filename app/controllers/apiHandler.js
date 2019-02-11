@@ -3,6 +3,7 @@
 const apiKey = process.env.API_KEY;
 const https = require('https');
 
+
 function apiHandler() {
   
   this.getStocks = (req, res) => {
