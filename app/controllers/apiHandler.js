@@ -59,41 +59,42 @@ function apiHandler() {
         let db  = client.db('mlab'),
         library = db.collection('stock-prices');
         
-        if(req.query.like) {
-           //"98.254.191.29"
-          var clientIp =  "100.255.191.29"
-          library.findOne({userIp : clientIp }, function(err, ip) {
-            if(err) throw err;
+//         if(req.query.like) {
+//            //"98.254.191.29"
+//           var clientIp =  "100.255.191.29"
+//           library.findOne({userIp : clientIp }, function(err, ip) {
+//             if(err) throw err;
 
-            if(!ip) {
-              library.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
-               if(err) throw err;
-                 //console.log('insertOne result', result);
-                 //callback(result)
-             });
+//             if(!ip) {
+//               library.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
+//                if(err) throw err;
+//                  //console.log('insertOne result', result);
+//                  //callback(result)
+//              });
              
-            } 
+//             } 
             
-          });
-        }// if(req.query.like)
+//           });
+//         }// if(req.query.like)
         let arr = [];
-        library.find({}).forEach( (doc) => {
+        library.find({}, (doc) => {
           console.log(doc)
-             arr.push(doc.likes) 
+         
           
-            //likes.forEach( (err, item) => {
-                // watch for both errors and the end of the data
-                // if (err || !item) {
-                //     // display (or do something more interesting) with the error
-                //     if (err) console.log('error walking data, err = ', err);
-                //     // close the connection when done OR on error
-                //     client.close();
-                //     return;
-                // }
+            docs.forEach( (item) => {
+                //watch for both errors and the end of the data
+                if (err || !item) {
+                    // display (or do something more interesting) with the error
+                    if (err) console.log('error walking data, err = ', err);
+                    // close the connection when done OR on error
+                    client.close();
+                    return;
+                }
               
-            //});
-       callback(arr);
+            });
+        callback(doc)
         });
+        
         
        
       }); // MongoClient()
@@ -135,7 +136,7 @@ function apiHandler() {
         if (idx === arr.length-1) {
           
           queryIpDb(arr, function callback(db) {       
-            console.log('callback', db.likes);
+            console.log('callback', db);
             let response;
             if(arr.length === 1) {
               response = stockData[0];
