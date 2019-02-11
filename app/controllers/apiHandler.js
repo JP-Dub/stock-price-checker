@@ -66,23 +66,25 @@ function apiHandler() {
       library = db.collection('stock-prices');
       
       if(req.query.like) {
-      library.findOne({userIp : req.clientIp }, function(err, ip) {
-        if(err) throw err;
-              
-        if(!ip) {
-          library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
-            if(err) throw err;
-              console.log('result');
-            })
-        } else {
-            console.log(ip)
-        }
+        library.findOne({userIp : req.clientIp }, function(err, ip) {
+          if(err) throw err;
+
+          if(!ip) {
+            library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
+              if(err) throw err;
+                console.log('result');
+              })
+          } else {
+              console.log(ip)
+          };
+        });
       }
+      
+      library.find({}, {likes: 1}, (err, likes) => {
+        if(err) throw err;
+        console.log(likes)
+      });
         
-        
-            
-      });//findOne
-      //}
           
       client.close();
     }); // MongoClient()
