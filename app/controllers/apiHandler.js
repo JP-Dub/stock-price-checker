@@ -7,8 +7,8 @@ const https = require('https');
 function apiHandler() {
   
   this.getStocks = (req, res) => {
-    console.log(req.query)
-    let symbol = req.query.stock;
+    console.log(req.clientIp, req.query)
+ 
           
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     const stockPrices = (symbol, done) =>{   
@@ -55,8 +55,7 @@ function apiHandler() {
               price  = stock['Global Quote']['05. price'];
           console.log(ticker, price)
           stockData.push({'stock': ticker, 'price': price, 'rel_like' : -1});
-
-         
+        
          if (idx === symbol.length-1) return res.json({stockData})
           
         });
@@ -66,6 +65,8 @@ function apiHandler() {
           stockData.push(stock);
           return res.json({stockData});
       });
+    
+    if(!Array.isArray(symbol)) 
 
     
   };

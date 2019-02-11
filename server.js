@@ -9,9 +9,9 @@ var apiRoutes         = require('./routes/api.js');
 var fccTestingRoutes  = require('./routes/fcctesting.js');
 var runner            = require('./test-runner');
 
-let helmet   = require('helmet'),
-    mongoose = require('mongoose');
-     requestIp = require('request-ip');
+const helmet    = require('helmet'),
+      mongoose  = require('mongoose'),
+      requestIp = require('request-ip');
 
 var app = express();
 
@@ -33,6 +33,14 @@ mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.use, middleware used by npm "request-ip
+app.use(requestIp.mw())
+
+app.use(function(req, res, next) {      
+      // obj.ipaddress = req.clientIp;// returns user IP address
+       next();
+   });
 
 //Index page (static HTML)
 app.route('/')
