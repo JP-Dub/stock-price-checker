@@ -52,15 +52,14 @@ function apiHandler() {
     let arr = [];
     Array.isArray(symbol) ? symbol.forEach( (val, idx) => {                           
         stockPrices(val, function done(stock) {
-          arr.push(stock);
           let ticker = ['Global Quote']['01. symbol'];
           let price = ['Global Quote']['05. price'];
-          console.log(arr)
-          if(idx === symbol.length-1) {
-          return res.json({
-            'stockData' : [{'stock': arr[0] + ticker, 'r
-            })
-          }
+          let obj = { stockData : [] };
+          obj.stockData.push({'stock': ticker, 'price': price, 'rel_like' : -1});
+
+         
+         if (idx === symbol.length-1) return res.json({obj})
+          
         });
       })
       : stockPrices(symbol, function done(stock) {
