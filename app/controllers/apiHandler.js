@@ -8,8 +8,7 @@ function apiHandler() {
   this.getStocks = (req, res) => {
     console.log(req.query)
     let symbol = req.query.stock;
-        
-    
+          
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     const stockPrices = (symbol, done) =>{   
       let url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
@@ -38,7 +37,6 @@ function apiHandler() {
         res.on('end', () => {
           try {
             const parsedData = JSON.parse(rawData);
-            //console.log(parsedData);
             done(parsedData);
           } catch (e) {
             console.error(e.message);
@@ -52,8 +50,8 @@ function apiHandler() {
     let stockData = [];
     Array.isArray(symbol) ? symbol.forEach( (val, idx) => {                           
         stockPrices(val, function done(stock) {
-          let ticker = stock['Global Quote']['01. symbol'];
-          let price = stock['Global Quote']['05. price'];
+          let ticker = stock['Global Quote']['01. symbol'],
+              price  = stock['Global Quote']['05. price'];
           console.log(ticker, price)
           stockData.push({'stock': ticker, 'price': price, 'rel_like' : -1});
 
@@ -65,7 +63,7 @@ function apiHandler() {
       : stockPrices(symbol, function done(stock) {
           stockData = [];
           stockData.push(stock);
-          res.json({stockData});
+          return res.json({stockData});
       });
 
     
