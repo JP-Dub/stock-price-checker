@@ -1,7 +1,10 @@
 'use strict';
 
-const apiKey = process.env.API_KEY;
-const https = require('https');
+const apiKey      = process.env.API_KEY,
+      https       = require('https'),
+      MongoClient = require('mongodb');
+
+const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});      
 
 
 function apiHandler() {
@@ -47,23 +50,6 @@ function apiHandler() {
       }); // end of https request
     };
     
-    //let stockData = [];
-//     Array.isArray(symbol) ? symbol.forEach( (val, idx) => {                           
-//         stockPrices(val, function done(stock) {
-//           let ticker = stock['Global Quote']['01. symbol'],
-//               price  = stock['Global Quote']['05. price'];
-//           console.log(ticker, price)
-//           stockData.push({'stock': ticker, 'price': price, 'rel_like' : -1});
-        
-//          if (idx === symbol.length-1) return res.json({stockData})
-          
-//         });
-//       })
-//       : stockPrices(symbol, function done(stock) {
-//           stockData = [];
-//           stockData.push(stock);
-//           return res.json({stockData});
-//       });
     
     let stockData = [],
         symbol;
@@ -75,15 +61,18 @@ function apiHandler() {
       stockPrices(val, function done(stock) {
         let ticker = stock['Global Quote']['01. symbol'],
             price  = stock['Global Quote']['05. price'];
-            
-        
-        symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
-
+                  
+        //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
+        MongoClient.connect(CONNECTION_STRING, function(err, db) {
+          if(err) throw err;
+          
+          console.log(db);
+        });
         
         
         stockData.push({ 'stock': ticker, 'price': price });
         
-         if (idx === symbol.length-1) return res.json({stockData})
+        if (idx === symbol.length-1) return res.json({stockData})
           
         });
     });
