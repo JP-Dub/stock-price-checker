@@ -58,48 +58,60 @@ function apiHandler() {
                                    : symbol = [], symbol.push(req.query.stock);
     
            
-  
-    MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
-      if(err) throw err;          
-      
-      let db  = client.db('mlab'),
-      library = db.collection('stock-prices');
-      
-      if(req.query.like) {
-        library.findOne({userIp : req.clientIp }, function(err, ip) {
-          if(err) throw err;
+    const queryIpDb = (symbol, callback) => {
+      MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
+        if(err) throw err;          
 
-          if(!ip) {
-            library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
-              if(err) throw err;
-                console.log('insertOne result', result);
-              });
-          } 
+        let db  = client.db('mlab'),
+        library = db.collection('stock-prices');
+
+        if(req.query.like) {
+          library.findOne({userIp : req.clientIp }, function(err, ip) {
+            if(err) throw err;
+
+            if(!ip) {
+              library.insertOne({userIp: req.clientIp, likes: [symbol]}, (err, result) => {
+                if(err) throw err;
+                  console.log('insertOne result', result);
+                });
+            } 
+          });
+        }// if(req.query.like)
+
+        library.find({}, {likes: 1}, (err, likes) => {
+          if(err) throw err;
+          callback(likes);
         });
-      }// if(req.query.like)
-      
-      library.find({}, {likes: 1}, (err, likes) => {
-        if(err) throw err;
-        console.log(likes)
-      });
-        
-          
-      client.close();
-    }); // MongoClient()
-        
+
+        client.close();
+      }); // MongoClient()
+    };    
+    
     symbol.forEach( (val, idx) => {   
       let ticker, price;
       
       stockPrices(val, function done(stock) {
         ticker = stock['Global Quote']['01. symbol'],
-        price  = stock['Global Quote']['05. price']; 
-      });//stockPrices
-                
-      stockData.push({ 'stock': ticker, 'price': price });
-      
+        price  = stock['Global Quote']['05. price'];
+        stockData.push({ 'stock': ticker, 'price': price });
         
-      if (idx === symbol.length-1) return res.json({stockData})
-      
+        if(symbol.length < 1) {
+          stockData['likes'] = 0;
+        } else {    
+          stockData[              
+        }
+        
+        if (idx === symbol.length-1) {
+          queryIpDb(symbol, function callback(db) {
+            console.log('db', db);
+            
+            
+
+            return res.json({stockData})
+          });//queryIpDb
+        }
+      });//stockPrices
+    
     });//symbol.forEach()
 
     
