@@ -12,7 +12,7 @@ function apiHandler() {
   this.getStocks = (req, res) => {
     console.log(req.clientIp, req.query) 
      let stockData = [],
-         symbol;      
+         symbol =[];      
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     const stockPrices = (symbol, done) =>{   
       let url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
