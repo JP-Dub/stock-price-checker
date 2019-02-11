@@ -2,7 +2,7 @@
 
 const apiKey      = process.env.API_KEY,
       https       = require('https'),
-      MongoClient = require('mongodb');
+      MongoClient = require('mongodb').MongoClient;
 
 const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});      
 
@@ -63,10 +63,12 @@ function apiHandler() {
             price  = stock['Global Quote']['05. price'];
                   
         //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
-        MongoClient.connect(CONNECTION_STRING, function(err, db) {
+        MongoClient.connect(CONNECTION_STRING, function(err, client) {
           if(err) throw err;
           
-          console.log(db);
+          let db = client.db('mlab');
+          
+          
         });
         
         
