@@ -63,10 +63,15 @@ function apiHandler() {
             price  = stock['Global Quote']['05. price'];
                   
         //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
-        MongoClient.connect(CONNECTION_STRING, function(err, client) {
+        MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
           if(err) throw err;
           
-          let db = client.db('mlab');
+          let db      = client.db('mlab'),
+              library = db.collection('users');
+          library.find(, function(err, ip) {
+            if(err) throw err;
+            console.log('ip', ip);
+          })
           
           
         });
