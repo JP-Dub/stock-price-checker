@@ -29,3 +29,9 @@ let ajax = {
 };
 
 module.exports = ajax;
+
+/*
+
+userIp : Number,
+ticker : Goog
+/*

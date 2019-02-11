@@ -68,7 +68,12 @@ function apiHandler() {
           
           let db      = client.db('mlab'),
               library = db.collection('stock-prices');
-          library.find({userIp : req.clientIp}, function(err, ip) {
+          library.findAndModify({
+            query: { userIp : req.clientIp },
+            options: { _id: 0 },
+            new: true,
+            upsert: true
+            }, function(err, ip) {
             if(err) throw err;
             console.log('ip', ip);
           })
