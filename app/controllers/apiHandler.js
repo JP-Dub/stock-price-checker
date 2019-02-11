@@ -11,7 +11,8 @@ function apiHandler() {
   
   this.getStocks = (req, res) => {
     console.log(req.clientIp, req.query) 
-          
+     let stockData = [],
+         symbol;      
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     const stockPrices = (symbol, done) =>{   
       let url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
@@ -49,17 +50,9 @@ function apiHandler() {
         console.error(`Got error: ${e.message}`);
       }); // end of https request
     };
-    
-    
-    let stockData = [].slice(),
-        symbol;
-        
-    Array.isArray(req.query.stock) ? symbol = req.query.stock 
-                                   : symbol = [], symbol.push(req.query.stock);
-    
-           
-    const queryIpDb = (symbol, callback) => {
-      console.log(symbol)
+              
+    const queryIpDb = (callback) => {
+      //console.log(symbol)
       MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
         if(err) throw err;          
 
@@ -73,7 +66,7 @@ function apiHandler() {
             if(!ip) {
               library.insertOne({userIp: req.clientIp, likes: symbol}, (err, result) => {
                 if(err) throw err;
-                  console.log('insertOne result', result);
+                 // console.log('insertOne result', result);
                 });
             } 
           });
@@ -82,11 +75,16 @@ function apiHandler() {
         library.find({}, {likes: 1}, (err, likes) => {
           if(err) throw err;
           callback(likes);
+          //client.close();
         });
 
-        client.close();
+       
       }); // MongoClient()
     };    
+    
+            
+    Array.isArray(req.query.stock) ? symbol = req.query.stock 
+                                   : symbol = [], symbol.push(req.query.stock);
     
     symbol.forEach( (val, idx, arr) => {   
       let ticker, price;
@@ -103,8 +101,8 @@ function apiHandler() {
         }
         
         if (idx === symbol.length-1) {
-          queryIpDb(arr, function callback(db) {
-            console.log('db', db);
+          queryIpDb(function callback(db) {
+            console.log('database', db);
                       
 
             return res.json({stockData})
