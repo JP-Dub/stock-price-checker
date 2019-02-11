@@ -114,27 +114,33 @@ function apiHandler() {
       
       stockPrices(val, function done(data) {
         let stock = data['Global Quote'],
-            error = {error: 'Unable to find ticker'};
+            objError = {error: 'Unable to find ticker'},
+            error = 0;
          
         if(isEmpty(stock)) {
-          stockData.push(error);
+          stockData.push(objError);
+          error++;
         } else {
+          
         let ticker = stock['01. symbol'],
             price  = stock['05. price'];
         stockData.push({ 'stock': ticker, 'price': price });
         
-        // if(!arr.length-1) {
-        //   stockData[idx]['likes'] = 1;
-        // } else {    
-        //   stockData[idx]['rel_likes'] = 0;              
-        // }
         }
+        
         if (idx === arr.length-1) {
           
-          queryIpDb(arr, function callback(db) {
-            console.log('callback', db);
+          queryIpDb(arr, function callback(db) {       
+            console.log('callback', db.likes);
+            let response;
+            if(arr.length === 1) {
+              response = stockData[0];
+              response['likes'] = 0;
+            } else {
+              stockData.forEach( (obj  
+            }
                       
-            return res.json({stockData})
+            return res.json({stockData : response})
           });//queryIpDb
         }
       });//stockPrices
@@ -148,3 +154,9 @@ function apiHandler() {
 module.exports = apiHandler;
 
       //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
+
+        // if(!arr.length-1) {
+        //   stockData[idx]['likes'] = 1;
+        // } else {    
+        //   stockData[idx]['rel_likes'] = 0;              
+        // }
