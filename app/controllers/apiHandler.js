@@ -58,7 +58,7 @@ function apiHandler() {
 
         let db  = client.db('mlab'),
         library = db.collection('stock-prices');
-
+        console.log('req.like', req.query.like)
         if(req.query.like) {
           library.findOne({userIp : req.clientIp }, function(err, ip) {
             if(err) throw err;
@@ -75,8 +75,9 @@ function apiHandler() {
           });
         }// if(req.query.like)
 
-        library.find({}, {_id:0, likes: 1}, (err, likes) => {
+        library.find({}, (err, likes) => {
           if(err) throw err;
+          console.log('likes', likes);
           callback(likes);
           //client.close();
         });
@@ -103,27 +104,27 @@ function apiHandler() {
     symbol.forEach( (val, idx, arr) => {    
       
       stockPrices(val, function done(data) {
-        let stock = data['Global Quote'];
-              
+        let stock = data['Global Quote'],
+            error = {error: 'Unable to find ticker'};
+         
         if(isEmpty(stock)) {
-          stockData.push({'error' : 'Unable to find ticker'});
+          stockData.push(error);
         } else {
         let ticker = stock['01. symbol'],
             price  = stock['05. price'];
         stockData.push({ 'stock': ticker, 'price': price });
-        console.log(stockData, ticker, price)
-        if(!arr.length-1) {
-          stockData[idx]['likes'] = 1;
-        } else {    
-          stockData[idx]['rel_likes'] = 0;              
-        }
+        
+        // if(!arr.length-1) {
+        //   stockData[idx]['likes'] = 1;
+        // } else {    
+        //   stockData[idx]['rel_likes'] = 0;              
+        // }
         }
         if (idx === arr.length-1) {
           
           queryIpDb(arr, function callback(db) {
             console.log('callback');
                       
-
             return res.json({stockData})
           });//queryIpDb
         }
