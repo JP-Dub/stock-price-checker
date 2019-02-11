@@ -76,17 +76,14 @@ function apiHandler() {
             
 //           });
 //         }// if(req.query.like)
+        let arr = [];
+
+        library.find({}, function(err, results) {
+          console.log(err, results)
+        })
+
         
-        library.find({}, {_id: 0, likes: 1}).forEach((stuff => {
-          console.log(stuff.likes)
           
-        }));
-        
-        
-        
-        
-        
-       
       }); // MongoClient()
     };    
                 
