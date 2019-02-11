@@ -51,7 +51,7 @@ function apiHandler() {
       }); // end of https request
     };
               
-    const queryIpDb = (callback) => {
+    const queryIpDb = (arr, callback) => {
       //console.log(symbol)
       MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
         if(err) throw err;          
@@ -64,7 +64,7 @@ function apiHandler() {
             if(err) throw err;
 
             if(!ip) {
-              library.insertOne({userIp: req.clientIp, likes: symbol}, (err, result) => {
+              library.insertOne({userIp: req.clientIp, likes: arr}, (err, result) => {
                if(err) throw err;
                  console.log('insertOne result', result);
                  callback(result)
@@ -104,7 +104,8 @@ function apiHandler() {
         }
         
         if (idx === symbol.length-1) {
-          queryIpDb(function callback(db) {
+          console.log(
+          queryIpDb(arr, function callback(db) {
             console.log('database', db);
                       
 
