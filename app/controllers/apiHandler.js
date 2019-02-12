@@ -87,8 +87,8 @@ function apiHandler() {
          function findTicker(symbol, like) {
            let obj = {};
            
-           symbol.forEach(val => {   
-             var symb = val.toUpperCase();
+           symbol.forEach(symb => {   
+             //var symb = val.toUpperCase();
              var logged = false;
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
