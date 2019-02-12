@@ -83,30 +83,7 @@ function apiHandler() {
     }; 
     
     const getLikes = (arr, callback) => {
-         function noDuplicates(arr) {
-           var length = arr.length;
-           for(var i = 0; i < length; i++) {
-             for(var j = length; j > 0; j-- ) {
-               if(arr[i] == arr[j] && i !== j) {
-                 arr.splice(i, 1)
-               }    
-             }
-           }
-           return arr;
-         };
-      
-         function countItems(arr, copy) {
-           var obj = {};
-           arr.forEach( item => {
-             obj[item] = 0;
-             for(var i = 0; i < copy.length; i++ ) {
-                if(copy[i] === item) {
-                  obj[item]++
-                }
-             }
-           });         
-           return obj;
-         };
+         function 
     
          Stocks
            .find({}, {_id: 0, likes:1})
