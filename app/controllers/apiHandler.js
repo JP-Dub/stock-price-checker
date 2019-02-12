@@ -1,5 +1,5 @@
 'use strict';
-
+const Stocks      = require('../model/stockPrices.js');
 const apiKey      = process.env.API_KEY,
       https       = require('https'),
       MongoClient = require('mongodb').MongoClient;
@@ -52,40 +52,8 @@ function apiHandler() {
     }; // end of stockPrices()
               
     const queryIpDb = (arr, callback) => {
-      //console.log(symbol)
-      MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
-        if(err) throw err;          
+     Stock
 
-        let db  = client.db('mlab'),
-        library = db.collection('stock-prices');
-        
-//         if(req.query.like) {
-//            //"98.254.191.29"
-//           var clientIp =  "100.255.191.29"
-//           library.findOne({userIp : clientIp }, function(err, ip) {
-//             if(err) throw err;
-
-//             if(!ip) {
-//               library.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
-//                if(err) throw err;
-//                  //console.log('insertOne result', result);
-//                  //callback(result)
-//              });
-             
-//             } 
-            
-//           });
-//         }// if(req.query.like)
-        let arr = [];
-
-        library.find({likes : {$type: 4}}).forEach(docs => {
-            arr.push(docs.likes);                  
-            console.log(docs)                        
-           
-        })
-        console.log('arr', arr)
-      
-      }); // MongoClient()
     };    
                 
     Array.isArray(req.query.stock) ? (
@@ -156,3 +124,39 @@ module.exports = apiHandler;
         // } else {    
         //   stockData[idx]['rel_likes'] = 0;              
         // }
+
+/*
+      MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
+        if(err) throw err;          
+
+        let db  = client.db('mlab'),
+        library = db.collection('stock-prices');
+        
+//         if(req.query.like) {
+//            //"98.254.191.29"
+//           var clientIp =  "100.255.191.29"
+//           library.findOne({userIp : clientIp }, function(err, ip) {
+//             if(err) throw err;
+
+//             if(!ip) {
+//               library.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
+//                if(err) throw err;
+//                  //console.log('insertOne result', result);
+//                  //callback(result)
+//              });
+             
+//             } 
+            
+//           });
+//         }// if(req.query.like)
+        let arr = [];
+
+        library.find({}, (err, docs) => {
+            arr.push(docs.likes);                  
+            console.log(err, docs)                        
+           
+        })
+        console.log('arr', arr)
+      
+      }); // MongoClient()
+*/
