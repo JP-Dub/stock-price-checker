@@ -78,11 +78,13 @@ function apiHandler() {
 //         }// if(req.query.like)
         let arr = [];
 
-        library.find({}, {_id: 0, likes: 1}).forEach(docs => {
+        library.find({likes : {$gt : 0 }}).forEach(docs => {
+            arr.push(docs.likes);                  
             console.log(docs)                        
+           
         })
-            
-          
+        console.log('arr', arr)
+      
       }); // MongoClient()
     };    
                 
