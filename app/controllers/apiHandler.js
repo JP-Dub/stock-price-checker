@@ -52,16 +52,12 @@ function apiHandler() {
     }; // end of stockPrices()
               
     const queryIpDb = (arr, callback) => {
-     // Stocks.find({userIp: req.clientIp}).exec( (err, user) => {
-     //   if(err) throw err;
-     //   console.log(user)
-     // });
   
        //if(req.query.like) {
            //"98.254.191.29"
-          var clientIp =  '105.255.191.25';
+          //var clientIp =  '105.255.191.25';
           Stocks.findOne({
-             userIp: clientIp
+             userIp: req.clientIp
             }, {
              new   : true,
              upsert: true
@@ -71,7 +67,7 @@ function apiHandler() {
             
             if(!userIp && req.query.like) {
               let user = new Stocks();
-              user.userIp = clientIp;
+              user.userIp = req.clientIp;
               user.likes = arr;             
                      
               user.save((err, res) => {
@@ -85,7 +81,20 @@ function apiHandler() {
       //  }// if(req.query.like)
      //});
       callback('done');
-    };    
+    }; 
+    
+    const getLikes = (arr, callback) => {
+    
+         Stocks
+           .find({}, {_id: 0, likes:1})
+           .exec( (err, likes) => {
+             if(err) throw err;
+           
+           
+             console.log('likes', likes);
+           });      
+    
+    };
                 
     Array.isArray(req.query.stock) ? (
       symbol = req.query.stock 
@@ -119,18 +128,15 @@ function apiHandler() {
         stockData.push({ 'stock': ticker, 'price': price });
         
         }
-        
+        let ipQuery;
         if (idx === arr.length-1) {
-        
-          queryIpDb(arr, function callback(db) {   
+          if(req.query.like) {
+            ipQuery = queryIpDb(arr, function callback(db){ return db});
+          }
             
-            // if(db) {
-            //   Stocks
-            //     .find({}, {_id: 0, likes:1})
-            //     .exec( (err, likes) => {
-            //     console.log('likes', likes);
-            //   });
-            // }
+           
+          getLikes(arr, function callback(db) {
+            
             console.log('callback', db);
             let response;
             if(arr.length === 1) {
