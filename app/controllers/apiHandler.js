@@ -87,7 +87,8 @@ function apiHandler() {
          function findTicker(symbol, like) {
            let obj = {};
            
-           symbol.forEach(symb => {            
+           symbol.forEach(symb => {   
+             symb.toUpperCase();
              var logged = false;
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
@@ -133,40 +134,30 @@ function apiHandler() {
       queryIpDb(symbol);
     }
     
+    getLikes(symbol, function callback(db) {
+       
     symbol.forEach( (val, idx, arr) => {    
-      val.toUpperCase();
+      
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'],
-            objError = {error: 'Unable to find ticker'},
-            error    = 0;
-        let db;
-        if(idx === 0) getLikes(arr, function callback(obj) {
-           db = obj;
-        });
+            objError = {error: 'Unable to find ticker'};
          
         if(isEmpty(stock)) {
           stockData.push(objError);
-          error++;
-        } else {
-          let price;
-          for(var key in stock) {
-            var val = stock[key];   
-            console.log(key, val)
-            if(key === '05. price' ) price = val;
-          }   
-                    
+        } else {  
+          console.log(db)          
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          stockData.push({ 'stock': val, 'price': price, [likes]:  db[val] });
+          stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]:  db[val] });
                  
-          console.log(stockData, db)
-                          
-          return res.json({stockData : stockData})
-         
+         // console.log(stockData, db)
+          if(idx === arr.length-1) {                
+            return res.json({stockData : stockData})
+          }
         }//else
       });//stockPrices
   
     });//symbol.forEach()
-
+    });//getLikes()
     
   };
 };
