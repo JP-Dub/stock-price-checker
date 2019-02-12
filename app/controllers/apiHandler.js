@@ -78,7 +78,7 @@ function apiHandler() {
 //         }// if(req.query.like)
         let arr = [];
 
-        library.find({likes : {$gt : 0 }}).forEach(docs => {
+        library.find({likes : {$type: 4}}).forEach(docs => {
             arr.push(docs.likes);                  
             console.log(docs)                        
            
