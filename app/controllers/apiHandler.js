@@ -133,9 +133,11 @@ function apiHandler() {
     if(req.query.like) {
       queryIpDb(symbol);
     } 
-
+    
     symbol.forEach( (symb, idx, arr) => {    
-      var val = symb.toUp
+      var val = symb.toUpperCase();
+      let ticker = [];
+      ticker.push(val);
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'],
             objError = {error: 'Unable to find ticker'},
@@ -153,15 +155,15 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db) {
-              console.log(stockData, db, db[symbol[0]], symbol[0])
+              //console.log(stockData, db, db[ticker[0]])
               if(error) res.json({stockData: stockData});
               if(arr.length == 1) {
-                stockData[0]['likes'] = db[val.toUpperCase()];
+                stockData[0]['likes'] = db[val];
                 response = stockData[0];
                 return res.json({stockData : response})
               } else {                
-                stockData[0]['rel_likes'] = db[arr[0]] - db[arr[1]];
-                stockData[1]['rel_likes'] = db[arr[1]] - db[arr[0]];
+                stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]];
+                stockData[1]['rel_likes'] = db[ticker[1]] - db[ticker[0]];
                 response = stockData;      
                 return res.json({stockData : response})
               }
