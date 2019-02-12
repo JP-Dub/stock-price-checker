@@ -144,11 +144,17 @@ function apiHandler() {
           stockData.push(objError);
           error++;
         } else {
+          for(var key in stock) {
+            var val = stock[key];
+            if(
+          }
+        if(idx === arr.length-1) {  
         getLikes(arr, function callback(db) {  
-        let ticker = stock['01. symbol'],
-            price  = stock['05. price'];
-        let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-        stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
+                
+          let ticker = stock['01. symbol'],
+              price  = stock['05. price'];
+          let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
+          stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
         
         //}
         // let ipQuery;
@@ -175,6 +181,7 @@ function apiHandler() {
          //   return res.json({stockData : response})
           });//queryIpDb
         } // if(idx === arr.length-1)
+        }
       });//stockPrices
     
     });//symbol.forEach()
