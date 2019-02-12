@@ -78,22 +78,49 @@ function apiHandler() {
             }
             
           });
-      //  }// if(req.query.like)
-     //});
-      callback('done');
+      console.log('log ip address');      
+      //callback('done');
     }; 
     
     const getLikes = (arr, callback) => {
+         function noDuplicates(arr) {
+           var length = arr.length;
+           for(var i = 0; i < length; i++) {
+             for(var j = length; j > 0; j-- ) {
+               if(arr[i] == arr[j] && i !== j) {
+                 arr.splice(i, 1)
+               }    
+             }
+           }
+           return arr;
+         };
+      
+         function countItems(arr, copy) {
+           var obj = {};
+           arr.forEach( item => {
+             obj[item] = 0;
+             for(var i = 0; i < copy.length; i++ ) {
+                if(copy[i] === item) {
+                  obj[item]++
+                }
+             }
+           });         
+           return obj;
+         };
     
          Stocks
            .find({}, {_id: 0, likes:1})
            .exec( (err, likes) => {
              if(err) throw err;
-           
-           
-             console.log('likes', likes);
-           });      
-    
+             
+             
+             let like = [];
+             likes.map(each => each['likes'].forEach(val => like.push(val))); 
+             let likeCopy = like.slice();           
+             
+             callback(countItems(noDuplicates(like), likeCopy));
+         
+           });       
     };
                 
     Array.isArray(req.query.stock) ? (
@@ -131,7 +158,7 @@ function apiHandler() {
         let ipQuery;
         if (idx === arr.length-1) {
           if(req.query.like) {
-            ipQuery = queryIpDb(arr, function callback(db){ return db});
+            queryIpDb(arr);
           }
             
            
