@@ -158,7 +158,7 @@ function apiHandler() {
         //   }
             
            
-          getLikes(arr, function callback(db) {            
+          //getLikes(arr, function callback(db) {            
            
             
             // let response;
