@@ -52,30 +52,32 @@ function apiHandler() {
     }; // end of stockPrices()
               
     const queryIpDb = (arr, callback) => {
-     // Stocks.find({}).exec( (err, user) => {
+     // Stocks.find({userIp: req.clientIp}).exec( (err, user) => {
      //   if(err) throw err;
-       console.log(arr)
+     //   console.log(user)
+     // });
+  
        if(req.query.like) {
            //"98.254.191.29"
-          var clientIp =  "100.255.191.29"
-          Stocks.findOneAndUpdate(
-            {userIp: clientIp
+          var clientIp =  '100.255.191.29';
+          Stocks.findOneAndUpdate({
+             userIp: clientIp
             }, {
              new   : true,
              upsert: true
-            }, (err, ip) => {
+            }, (err, userIp) => {
             if(err) throw err;
-            console.log(ip)
-            if(!ip) {
-              console.log('no ip')
-              // Stocks.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
-              //  if(err) throw err;
-                 //console.log('insertOne result', result);
-                 //callback(result)
-             //});
-             
-            } 
+            console.log(userIp)
             
+            if(!userIp) {
+              console.log('no ip') 
+            }
+            
+            // userIp.save((err, res) => {
+            //   if(err) throw err;
+            //   console.log(res);
+            // });  
+            callback(userIp)
           });
         }// if(req.query.like)
      //});
