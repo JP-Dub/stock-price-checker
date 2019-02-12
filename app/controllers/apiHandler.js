@@ -83,7 +83,25 @@ function apiHandler() {
     }; 
     
     const getLikes = (arr, callback) => {
-         function 
+      
+         function findTicker(symbol, like) {
+           let obj = {};
+           symbol.forEach(symb => {
+          
+             var logged = false;
+             for(var i = 0; i < like.length; i++) {
+               if(like[i] === symb) {
+                 logged ? (
+                   obj[symb]++   
+                 ) : ( 
+                   obj[symb] = 1,
+                   logged = true
+                 );
+               };
+             };
+           });
+           return obj;
+         };
     
          Stocks
            .find({}, {_id: 0, likes:1})
@@ -93,9 +111,9 @@ function apiHandler() {
              
              let like = [];
              likes.map(each => each['likes'].forEach(val => like.push(val))); 
-             let likeCopy = like.slice();           
+             //let likeCopy = like.slice();           
              
-             callback(countItems(noDuplicates(like), likeCopy));
+             callback(findTicker(arr, like));
          
            });       
     };
