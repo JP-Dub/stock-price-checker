@@ -167,9 +167,7 @@ function apiHandler() {
                 response = stockData;      
                 return res.json({stockData : response})
               }
-              
-              
-              
+                         
             });
         }   
       });//stockPrices
