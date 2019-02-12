@@ -132,35 +132,36 @@ function apiHandler() {
     if(req.query.like) {
       queryIpDb(symbol);
     }
-    //let ticker, price;
+    
     symbol.forEach( (val, idx, arr) => {    
       val.toUpperCase();
       stockPrices(val, function done(data) {
-        let stock = data['Global Quote'],
+        let stock    = data['Global Quote'],
             objError = {error: 'Unable to find ticker'},
-            error = 0;
+            error    = 0;
+        let db;
+        if(idx === 0) getLikes(arr, function callback(obj) {
+           db = obj;
+        });
          
         if(isEmpty(stock)) {
           stockData.push(objError);
           error++;
         } else {
+          let price;
           for(var key in stock) {
-            var val = stock[key];        
-            if( key === '01. symbol' || key === '05. price' ) stockData.push(val);
+            var val = stock[key];   
+            console.log(key, val)
+            if(key === '05. price' ) price = val;
           }   
-          
-          getLikes(arr, function callback(db) {  
-             let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-             stockData.push({ 'stock': stockData[0], 'price': stockData[1], [likes]:  db });
-          
-           
-            console.log('trial', stockData)
-//           getLikes(arr, function callback(db) {  
-            
-                      
-         //   return res.json({stockData : response})
-          });
-         } // if(idx === arr.length-1)   
+                    
+          let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
+          stockData.push({ 'stock': val, 'price': price, [likes]:  db[val] });
+                 
+          console.log(stockData, db)
+                          
+          return res.json({stockData : stockData})
+         
         }//else
       });//stockPrices
   
