@@ -144,13 +144,13 @@ function apiHandler() {
           stockData.push(objError);
           error++;
         } else {
-          
+        getLikes(arr, function callback(db) {  
         let ticker = stock['01. symbol'],
             price  = stock['05. price'];
         let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-        stockData.push({ 'stock': ticker, 'price': price, [likes]:  });
+        stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
         
-        }
+        //}
         // let ipQuery;
         // if (idx === arr.length-1) {
         //   if(req.query.like) {
@@ -172,9 +172,9 @@ function apiHandler() {
             //   response = stockData;
             // }
                       
-            return res.json({stockData : response})
+         //   return res.json({stockData : response})
           });//queryIpDb
-        //} // if(idx === arr.length-1)
+        } // if(idx === arr.length-1)
       });//stockPrices
     
     });//symbol.forEach()
