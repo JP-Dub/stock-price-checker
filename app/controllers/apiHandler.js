@@ -57,7 +57,7 @@ function apiHandler() {
            //"98.254.191.29"
           var clientIp =  '101.254.175.23';
           Stocks.findOne({
-             userIp: clientIp
+             userIp: req.clientIp
             }, {
              new   : true,
              upsert: true
@@ -67,7 +67,7 @@ function apiHandler() {
             
             if(!userIp && req.query.like) {
               let user = new Stocks();
-              user.userIp = clientIp;
+              user.userIp = req.clientIp;
               user.likes = arr;             
                      
               user.save((err, res) => {
@@ -144,42 +144,23 @@ function apiHandler() {
           stockData.push(objError);
           error++;
         } else {
+          let trial = [];
           for(var key in stock) {
-            var val = stock[key];
-            if(
+            var val = stock[key];        
+            if( key === '01. symbol' || key === '05. price' ) trial.push(val);
           }
-        if(idx === arr.length-1) {  
-        getLikes(arr, function callback(db) {  
-                
+          
           let ticker = stock['01. symbol'],
               price  = stock['05. price'];
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
           stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
-        
-        //}
-        // let ipQuery;
-        // if (idx === arr.length-1) {
-        //   if(req.query.like) {
-        //     queryIpDb(arr);
-        //   }
-            
-           
-          //getLikes(arr, function callback(db) {            
-           
-            
-            // let response;
-            // if(arr.length === 1) {
-            //   response = stockData[0];
-            //   response['likes'] = 0;
-            // } else {
-            //   stockData.forEach( (obj, index) => {
-            //     obj['rel_likes'] = 0;            
-            //   });
-            //   response = stockData;
-            // }
+        if(idx === arr.length-1) {  
+          console.log('trial', trial)
+//         getLikes(arr, function callback(db) {  
+                
                       
          //   return res.json({stockData : response})
-          });//queryIpDb
+        //  });//queryIpDb
         } // if(idx === arr.length-1)
         }
       });//stockPrices
@@ -235,3 +216,30 @@ module.exports = apiHandler;
       
       }); // MongoClient()
 */
+
+          // let ticker = stock['01. symbol'],
+          //     price  = stock['05. price'];
+          // let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
+          // stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
+        
+        //}
+        // let ipQuery;
+        // if (idx === arr.length-1) {
+        //   if(req.query.like) {
+        //     queryIpDb(arr);
+        //   }
+            
+           
+          //getLikes(arr, function callback(db) {            
+           
+            
+            // let response;
+            // if(arr.length === 1) {
+            //   response = stockData[0];
+            //   response['likes'] = 0;
+            // } else {
+            //   stockData.forEach( (obj, index) => {
+            //     obj['rel_likes'] = 0;            
+            //   });
+            //   response = stockData;
+            // }
