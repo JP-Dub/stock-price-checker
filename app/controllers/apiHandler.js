@@ -67,7 +67,7 @@ function apiHandler() {
              upsert: true
             }, (err, userIp) => {
             if(err) throw err;
-            console.log(userIp)
+            //console.log(userIp)
             
             if(!userIp) {
               let user = new Stocks();
@@ -83,7 +83,7 @@ function apiHandler() {
           });
         }// if(req.query.like)
      //});
-
+      callback('done');
     };    
                 
     Array.isArray(req.query.stock) ? (
@@ -121,7 +121,15 @@ function apiHandler() {
         
         if (idx === arr.length-1) {
           
-          queryIpDb(arr, function callback(db) {       
+          queryIpDb(arr, function callback(db) {   
+            
+            if(db) {
+              Stocks
+                .find({}, {_id: 0, likes:1})
+                .exec( (err, likes) => {
+                console.log('likes', likes);
+              });
+            }
             console.log('callback', db);
             let response;
             if(arr.length === 1) {
