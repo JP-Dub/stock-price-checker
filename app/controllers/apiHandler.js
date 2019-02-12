@@ -107,14 +107,11 @@ function apiHandler() {
            .find({}, {_id: 0, likes:1})
            .exec( (err, likes) => {
              if(err) throw err;
-             
-             
+                          
              let like = [];
              likes.map(each => each['likes'].forEach(val => like.push(val))); 
-             //let likeCopy = like.slice();           
-             
-             callback(findTicker(arr, like));
-         
+                                 
+             callback(findTicker(arr, like));        
            });       
     };
                 
@@ -134,7 +131,7 @@ function apiHandler() {
     
     //let ticker, price;
     symbol.forEach( (val, idx, arr) => {    
-      
+      val.toUpperCase();
       stockPrices(val, function done(data) {
         let stock = data['Global Quote'],
             objError = {error: 'Unable to find ticker'},
