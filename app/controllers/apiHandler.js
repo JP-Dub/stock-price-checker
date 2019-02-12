@@ -144,27 +144,26 @@ function apiHandler() {
           stockData.push(objError);
           error++;
         } else {
-          let trial = [];
           for(var key in stock) {
             var val = stock[key];        
-            if( key === '01. symbol' || key === '05. price' ) trial.push(val);
-          }
+            if( key === '01. symbol' || key === '05. price' ) stockData.push(val);
+          }   
           
-          let ticker = stock['01. symbol'],
-              price  = stock['05. price'];
-          let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
-        if(idx === arr.length-1) {  
-          console.log('trial', trial)
-//         getLikes(arr, function callback(db) {  
-                
+          getLikes(arr, function callback(db) {  
+             let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
+             stockData.push({ 'stock': stockData[0], 'price': stockData[1], [likes]:  db });
+          
+           
+            console.log('trial', stockData)
+//           getLikes(arr, function callback(db) {  
+            
                       
          //   return res.json({stockData : response})
-        //  });//queryIpDb
-        } // if(idx === arr.length-1)
-        }
+          });
+         } // if(idx === arr.length-1)   
+        }//else
       });//stockPrices
-    
+  
     });//symbol.forEach()
 
     
