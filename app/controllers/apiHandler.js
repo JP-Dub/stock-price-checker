@@ -134,14 +134,16 @@ function apiHandler() {
       queryIpDb(symbol);
     } 
 
-    symbol.forEach( (val, idx, arr) => {    
-      
+    symbol.forEach( (symb, idx, arr) => {    
+      var val = symb.toUp
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'],
-            objError = {error: 'Unable to find ticker'};
+            objError = {error: 'Unable to find ticker'},
+            error = 0;
          
         if(isEmpty(stock)) {
           stockData.push(objError);
+          error++;
         } else {  
           //console.log(db)          
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
@@ -151,16 +153,20 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db) {
+              console.log(stockData, db, db[symbol[0]], symbol[0])
+              if(error) res.json({stockData: stockData});
               if(arr.length == 1) {
-                stockData[0]['likes'] = db[val];
-              } else {
-                
+                stockData[0]['likes'] = db[val.toUpperCase()];
+                response = stockData[0];
+                return res.json({stockData : response})
+              } else {                
                 stockData[0]['rel_likes'] = db[arr[0]] - db[arr[1]];
                 stockData[1]['rel_likes'] = db[arr[1]] - db[arr[0]];
-              
+                response = stockData;      
+                return res.json({stockData : response})
               }
               
-              return res.json({stockData : response})
+              
               
             });
         }   
