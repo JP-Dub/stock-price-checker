@@ -132,10 +132,8 @@ function apiHandler() {
     
     if(req.query.like) {
       queryIpDb(symbol);
-    }
-    
-    getLikes(symbol, function callback(db) {
-   if(db) {
+    } 
+
     symbol.forEach( (val, idx, arr) => {    
       
       stockPrices(val, function done(data) {
@@ -147,19 +145,27 @@ function apiHandler() {
         } else {  
           //console.log(db)          
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]:  db[arr[idx]] || 0 });
+          stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]: 0 });
         }//else         
         //console.log(stockData)
-        if(idx === arr.length-1) {                
-          return res.json({stockData : stockData})
-        }
-       
+        let response;
+        if(idx === arr.length-1) {  
+            getLikes(symbol, function callback(db) {
+              if(arr.length == 1) {
+                stockData[0]['likes'] = db[val];
+              } else {
+                
+                stockData[0]['rel_likes'] = db[arr[0]] - db[arr[1]];
+                stockData[1]['rel_likes'] = db[arr[1]] - db[arr[0]];
+              
+              }
+              
+              return res.json({stockData : response})
+              
+            });
+        }   
       });//stockPrices
-  
-    });//symbol.forEach()
-   }
-    });//getLikes()
-    
+    });//symbol.forEach()   
   };
 };
 
