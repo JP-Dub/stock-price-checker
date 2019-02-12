@@ -129,6 +129,9 @@ function apiHandler() {
       return true;
     };
     
+    if(req.query.like) {
+      queryIpDb(symbol);
+    }
     //let ticker, price;
     symbol.forEach( (val, idx, arr) => {    
       val.toUpperCase();
@@ -147,11 +150,11 @@ function apiHandler() {
         stockData.push({ 'stock': ticker, 'price': price });
         
         }
-        let ipQuery;
-        if (idx === arr.length-1) {
-          if(req.query.like) {
-            queryIpDb(arr);
-          }
+        // let ipQuery;
+        // if (idx === arr.length-1) {
+        //   if(req.query.like) {
+        //     queryIpDb(arr);
+        //   }
             
            
           getLikes(arr, function callback(db) {            
@@ -170,7 +173,7 @@ function apiHandler() {
                       
             return res.json({stockData : response})
           });//queryIpDb
-        }
+        //} // if(idx === arr.length-1)
       });//stockPrices
     
     });//symbol.forEach()
