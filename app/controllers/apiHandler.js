@@ -59,9 +59,9 @@ function apiHandler() {
   
        if(req.query.like) {
            //"98.254.191.29"
-          var clientIp =  '100.255.191.29';
+         // var clientIp =  '103.255.191.25';
           Stocks.findOneAndUpdate({
-             userIp: clientIp
+             userIp: req.clientIp
             }, {
              new   : true,
              upsert: true
@@ -70,14 +70,16 @@ function apiHandler() {
             console.log(userIp)
             
             if(!userIp) {
-              console.log('no ip') 
+              let user = new Stocks();
+              user.userIp = req.clientIp;
+              user.likes = arr;             
+                     
+              user.save((err, res) => {
+                if(err) throw err;
+                //callback(res)
+              });  
             }
             
-            // userIp.save((err, res) => {
-            //   if(err) throw err;
-            //   console.log(res);
-            // });  
-            callback(userIp)
           });
         }// if(req.query.like)
      //});
