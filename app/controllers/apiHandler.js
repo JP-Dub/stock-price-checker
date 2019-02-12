@@ -57,31 +57,32 @@ function apiHandler() {
      //   console.log(user)
      // });
   
-       if(req.query.like) {
+       //if(req.query.like) {
            //"98.254.191.29"
-         // var clientIp =  '103.255.191.25';
-          Stocks.findOneAndUpdate({
-             userIp: req.clientIp
+          var clientIp =  '105.255.191.25';
+          Stocks.findOne({
+             userIp: clientIp
             }, {
              new   : true,
              upsert: true
-            }, (err, userIp) => {
+           }, (err, userIp) => {
             if(err) throw err;
-            //console.log(userIp)
+            console.log('userIp', userIp)
             
-            if(!userIp) {
+            if(!userIp && req.query.like) {
               let user = new Stocks();
-              user.userIp = req.clientIp;
+              user.userIp = clientIp;
               user.likes = arr;             
                      
               user.save((err, res) => {
                 if(err) throw err;
                 //callback(res)
+                console.log('res', res)
               });  
             }
             
           });
-        }// if(req.query.like)
+      //  }// if(req.query.like)
      //});
       callback('done');
     };    
@@ -120,16 +121,16 @@ function apiHandler() {
         }
         
         if (idx === arr.length-1) {
-          
+        
           queryIpDb(arr, function callback(db) {   
             
-            if(db) {
-              Stocks
-                .find({}, {_id: 0, likes:1})
-                .exec( (err, likes) => {
-                console.log('likes', likes);
-              });
-            }
+            // if(db) {
+            //   Stocks
+            //     .find({}, {_id: 0, likes:1})
+            //     .exec( (err, likes) => {
+            //     console.log('likes', likes);
+            //   });
+            // }
             console.log('callback', db);
             let response;
             if(arr.length === 1) {
