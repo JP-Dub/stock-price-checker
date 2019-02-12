@@ -81,9 +81,7 @@ function apiHandler() {
         library.find({}, {_id: 0, likes: 1}).forEach(docs => {
             console.log(docs)                        
         })
-        
-        
-        
+            
           
       }); // MongoClient()
     };    
