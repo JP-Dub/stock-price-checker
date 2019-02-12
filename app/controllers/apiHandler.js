@@ -86,8 +86,8 @@ function apiHandler() {
       
          function findTicker(symbol, like) {
            let obj = {};
-           symbol.forEach(symb => {
-          
+           
+           symbol.forEach(symb => {            
              var logged = false;
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
@@ -147,7 +147,8 @@ function apiHandler() {
           
         let ticker = stock['01. symbol'],
             price  = stock['05. price'];
-        stockData.push({ 'stock': ticker, 'price': price });
+        let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
+        stockData.push({ 'stock': ticker, 'price': price, [likes]:  });
         
         }
         // let ipQuery;
@@ -158,18 +159,18 @@ function apiHandler() {
             
            
           getLikes(arr, function callback(db) {            
-            console.log('callback', db);
+           
             
-            let response;
-            if(arr.length === 1) {
-              response = stockData[0];
-              response['likes'] = 0;
-            } else {
-              stockData.forEach( (obj, index) => {
-                obj['rel_likes'] = 0;            
-              });
-              response = stockData;
-            }
+            // let response;
+            // if(arr.length === 1) {
+            //   response = stockData[0];
+            //   response['likes'] = 0;
+            // } else {
+            //   stockData.forEach( (obj, index) => {
+            //     obj['rel_likes'] = 0;            
+            //   });
+            //   response = stockData;
+            // }
                       
             return res.json({stockData : response})
           });//queryIpDb
