@@ -87,8 +87,8 @@ function apiHandler() {
          function findTicker(symbol, like) {
            let obj = {};
            
-           symbol.forEach(symb => {   
-             symb.toUpperCase();
+           symbol.forEach(val => {   
+             var symb = val.toUpperCase();
              var logged = false;
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
@@ -111,7 +111,7 @@ function apiHandler() {
                           
              let like = [];
              likes.map(each => each['likes'].forEach(val => like.push(val))); 
-                                 
+                               
              callback(findTicker(arr, like));        
            });       
     };
@@ -135,7 +135,7 @@ function apiHandler() {
     }
     
     getLikes(symbol, function callback(db) {
-       
+   if(db) {
     symbol.forEach( (val, idx, arr) => {    
       
       stockPrices(val, function done(data) {
@@ -145,18 +145,19 @@ function apiHandler() {
         if(isEmpty(stock)) {
           stockData.push(objError);
         } else {  
-          console.log(db)          
+          //console.log(db)          
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]:  db[val] });
-                 
-         // console.log(stockData, db)
-          if(idx === arr.length-1) {                
-            return res.json({stockData : stockData})
-          }
-        }//else
+          stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]:  db[arr[idx]] || 0 });
+        }//else         
+        //console.log(stockData)
+        if(idx === arr.length-1) {                
+          return res.json({stockData : stockData})
+        }
+       
       });//stockPrices
   
     });//symbol.forEach()
+   }
     });//getLikes()
     
   };
