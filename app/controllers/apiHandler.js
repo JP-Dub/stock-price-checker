@@ -1,16 +1,12 @@
 'use strict';
 const Stocks      = require('../model/stockPrices.js');
 const apiKey      = process.env.API_KEY,
-      https       = require('https'),
-      MongoClient = require('mongodb').MongoClient;
-
-const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});      
+      https       = require('https');   
 
 
 function apiHandler() {
   
   this.getStocks = (req, res) => {
-    //console.log(req.clientIp, req.query) 
      let stockData = [],
          ticker    = [],
          error     = 0,

@@ -22,8 +22,10 @@ suite('Functional Tests', function() {
         .get('/api/stock-prices')
         .query({stock: 'goog'})
         .end(function(err, res){
+         console.log(res.body.stockData)
           assert.equal(res.status, 200);
-          //complete this one too
+          assert.isObject(res.body, 'should return and object');
+          assert.propertVal(res.body.stockData, 'stock', 'GOOG');
           
           done();
         });
