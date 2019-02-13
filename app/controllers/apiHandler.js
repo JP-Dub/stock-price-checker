@@ -151,15 +151,21 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db, ticker) {
-              console.log(db, ticker)
-              if(arr.length == 1) {
-                (error) ? (
-                  response = stockData[0] 
-                ) : (
-                  stockData[0].likes = db[val],
-                  response = stockData[0]
-                );
-                
+              console.log(symbol, db, ticker)
+              if(arr.length === 1) {
+                // (error) ? (
+                //   response = stockData[0] 
+                // ) : (
+                //   stockData[0].likes = db[val],
+                //   response = stockData[0]
+                // );
+                response = error ? (
+                  stockData[0]
+                  ):( 
+                  stockData[0].likes = db[val] || ticker[0], 
+                  stockData[0]
+                  );
+                console.log('response', response)
                 return res.json({stockData : response})
               } else {
                 console.log(db, ticker)
