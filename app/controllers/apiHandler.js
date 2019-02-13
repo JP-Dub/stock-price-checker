@@ -7,11 +7,9 @@ const apiKey      = process.env.API_KEY,
 function apiHandler() {
   
   this.getStocks = (req, res) => {
-    //console.log(req.query)
      let stockData = [],
          ticker    = [],
          error     = false,
-         errIdx    = 0,
          symbol;
    
     const stockPrices = (symbol, done) =>{   
@@ -147,11 +145,10 @@ function apiHandler() {
       let val = symb.toUpperCase();     
       
       stockPrices(val, async function done(data) {
-        let stock    = await data['Global Quote'];        
-        console.log( idx, stock)
+        let stock    = await data['Global Quote']; 
+        
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
-          //errIdx += idx + 1;
           error = true;
         } else {  
              
@@ -162,7 +159,7 @@ function apiHandler() {
         if(idx === arr.length-1) {
           
             getLikes(symbol, async function callback(db, stocked) {
-              console.log(symbol, db)
+              
               if(arr.length === 1) {
                 response = error ? (
                   stockData[0]
@@ -170,15 +167,11 @@ function apiHandler() {
                   stockData[0].likes = db[val] || 0, 
                   stockData[0]
                   );
-               // console.log('response', response)
+      
                 return res.json({stockData : response})
               } else {
-                //console.log(stocked)
-                // if(stocked.length == 2) {
-                // await stocked;
-                return await res.json({stockData : stocked})
-               // }
-                
+
+                return await res.json({stockData : stocked})            
               }
                          
             });
