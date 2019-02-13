@@ -98,9 +98,11 @@ function apiHandler() {
                };
              };
            });
-           console.log(stockData)
-           !stockData[0].error ? stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0 : false;
-           stockData.length > 1 && !stockData[1].error  ? stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0 : false;
+           
+           if(stockData.length === 2) {
+             !stockData[0].error ? stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0 : false;        
+             !stockData[1].error ? stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0 : false;
+           }
            return obj;
          };
     
@@ -157,7 +159,6 @@ function apiHandler() {
             getLikes(symbol, function callback(db) {
               console.log(symbol, db)
               if(arr.length === 1) {
-
                 response = error ? (
                   stockData[0]
                   ):( 

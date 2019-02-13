@@ -62,6 +62,7 @@ suite('Functional Tests', function() {
         .end(function(err, res){
           assert.equal(res.status, 202);
           assert.equal(res.text, 'testIp deleted');
+          done();
         });          
       });      
       
