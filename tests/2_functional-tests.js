@@ -56,44 +56,54 @@ suite('Functional Tests', function() {
 //         });          
 //       });
       
-      // test('Delete Ip Address for tests', function(done) {
-      //  chai.request(server)
-      //   .delete('/api/stock-prices')
-      //   .end(function(err, res){
-      //     assert.equal(res.status, 202);
-      //     assert.isEqual(res.text, 'testIp deleted');
-      //   });          
-      // });      
+//       test('Delete Ip Address for tests', function(done) {
+//        chai.request(server)
+//         .delete('/api/stock-prices')
+//         .end(function(err, res){
+//           assert.equal(res.status, 202);
+//           assert.isEqual(res.text, 'testIp deleted');
+//         });          
+//       });      
       
       test('2 stocks', function(done) {
-       chai.request(server)
-        .get('/api/stock-prices')
-        .query({stock: ['MGPI', 'AMZN']})
-        .end(function(err, res){
-         console.log('test' , res.body.stockData)
-          assert.equal(res.status, 200);
-          assert.isObject(res.body, 'should return and object');
-          assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
-          assert.propertyVal(res.body.stockData[1], 'stock', 'AMZN');
-          done();
+        chai.request(server)
+          .get('/api/stock-prices')
+          .query({stock: ['MGPI', 'AMZN']})
+          .end(function(err, res){
+           console.log('test' , res.body.stockData)
+            assert.equal(res.status, 200);
+            assert.isObject(res.body, 'should return and object');
+            assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
+            assert.propertyVal(res.body.stockData[1], 'stock', 'AMZN');
+            done();
         });          
       });
       
       test('2 stocks with like', function(done) {
-       chai.request(server)
-        .get('/api/stock-prices')
-        .query({stock: ['MGPI', 'AMZN'], like: true})
-        .end(function(err, res){
-         console.log('test' , res.body.stockData)
-          assert.equal(res.status, 200);
-          assert.isObject(res.body, 'should return and object');
-          assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
-          assert.propertyVal(res.body.stockData[0], 'rel_likes', 1);
-          assert.propertyVal(res.body.stockData[1], 'stock', 'AMZN');
-          assert.propertyVal(res.body.stockData[1], 'rel_likes', 1);
-          done();
+        chai.request(server)
+          .get('/api/stock-prices')
+          .query({stock: ['MGPI', 'AMZN'], like: true})
+          .end(function(err, res){
+           console.log('test' , res.body.stockData)
+            assert.equal(res.status, 200);
+            assert.isObject(res.body, 'should return and object');
+            assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
+            assert.propertyVal(res.body.stockData[0], 'rel_likes', 0);
+            assert.propertyVal(res.body.stockData[1], 'stock', 'AMZN');
+            assert.propertyVal(res.body.stockData[1], 'rel_likes', 0);
+            done();
         });            
       });
+
+      test('Delete Ip Address for tests', function(done) {
+        chai.request(server)
+          .delete('/api/stock-prices')
+          .end(function(err, res){
+            assert.equal(res.status, 202);
+            assert.equal(res.text, 'testIp deleted');
+            done();
+        });          
+      });        
       
     });
 

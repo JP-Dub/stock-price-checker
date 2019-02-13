@@ -7,7 +7,7 @@ const apiKey      = process.env.API_KEY,
 function apiHandler() {
   
   this.getStocks = (req, res) => {
-    console.log(req.query)
+    //console.log(req.query)
      let stockData = [],
          ticker    = [],
          error     = 0,
@@ -97,9 +97,9 @@ function apiHandler() {
                };
              };
            });
-           ticker.push(obj[arr[0]] - obj[arr[1]])
-           ticker.push(obj[arr[1]] - obj[arr[0]])
-           console.log(arr)
+           ticker.push(obj[arr[0]] - obj[arr[1]]||0)
+           ticker.push(obj[arr[1]] - obj[arr[0]]||0)
+           //console.log(arr)
            return obj;
          };
     
@@ -151,7 +151,7 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db, ticker) {
-              console.log(db, ticker, val)
+              //console.log(db, ticker, val)
               if(arr.length == 1) {
                 if(error) return res.json({stockData: stockData[0]});
                 stockData[0].likes = db[val];
@@ -159,8 +159,8 @@ function apiHandler() {
                 
                 return res.json({stockData : response})
               } else {                 
-                (error === 1) ? false : stockData[0].rel_likes = ticker[0] || 0;//(db[ticker[0]] - db[val]) || 0;
-                (error === 2) ? false : stockData[1].rel_likes = ticker[1] || 0;//(db[val] - db[ticker[0]]) || 0;
+                (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
+                (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
                 response = stockData;   
                
                 return res.json({stockData : response})
