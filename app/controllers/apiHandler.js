@@ -11,7 +11,7 @@ function apiHandler() {
      let stockData = [],
          ticker    = [],
          error     = false,
-         errIdx    = 1,
+         errIdx    = 0,
          symbol;
    
     const stockPrices = (symbol, done) =>{   
@@ -137,12 +137,13 @@ function apiHandler() {
     symbol.forEach( (symb, idx, arr) => {    
       let val = symb.toUpperCase();
       
+      
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'];        
        
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
-          errIdx += idx;
+          errIdx += idx + 1;
           error = true;
         } else {  
              
