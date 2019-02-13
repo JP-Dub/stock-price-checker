@@ -72,7 +72,7 @@ function apiHandler() {
             }
             
           });
-      console.log('duplicate ip address');      
+          console.log('duplicate ip address');      
     }; 
     
     const getLikes = (arr, callback) => {
@@ -148,11 +148,11 @@ function apiHandler() {
         let stock    = await data['Global Quote']; 
         
         if(isEmpty(stock)) {
-          stockData.push({error: 'Unable to find ticker'});
+          await stockData.push({error: 'Unable to find ticker'});
           error = true;
         } else {  
              
-          stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
+          await stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
         }        
    
         let response;
@@ -165,10 +165,10 @@ function apiHandler() {
                   stockData[0]
                   ):( 
                   stockData[0].likes = db[val] || 0, 
-                  stockData[0]
+                  await stockData[0]
                   );
       
-                return res.json({stockData : response})
+                return await res.json({stockData : response})
               } else {
 
                 return await res.json({stockData : stocked})            
