@@ -10,7 +10,8 @@ function apiHandler() {
     //console.log(req.query)
      let stockData = [],
          ticker    = [],
-         error     = 0,
+         error     = false,
+         errIdx    = 1,
          symbol;
    
     const stockPrices = (symbol, done) =>{   
@@ -141,7 +142,8 @@ function apiHandler() {
        
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
-          error++;
+          errIdx += idx;
+          error = true;
         } else {  
              
           //let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
@@ -153,12 +155,7 @@ function apiHandler() {
             getLikes(symbol, function callback(db, ticker) {
               console.log(symbol, db, ticker)
               if(arr.length === 1) {
-                // (error) ? (
-                //   response = stockData[0] 
-                // ) : (
-                //   stockData[0].likes = db[val],
-                //   response = stockData[0]
-                // );
+
                 response = error ? (
                   stockData[0]
                   ):( 
@@ -193,3 +190,10 @@ function apiHandler() {
 };
 
 module.exports = apiHandler;
+
+                // (error) ? (
+                //   response = stockData[0] 
+                // ) : (
+                //   stockData[0].likes = db[val],
+                //   response = stockData[0]
+                // );
