@@ -103,6 +103,7 @@ function apiHandler() {
              !stockData[0].error ? stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0 : false;        
              !stockData[1].error ? stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0 : false;
            }
+          
            return obj;
          };
     
@@ -114,7 +115,7 @@ function apiHandler() {
              let like = [];
              likes.map(each => each['likes'].forEach(val => like.push(val))); 
                                
-             callback(findTicker(arr, like));        
+             callback(findTicker(arr, like), stockData);        
            });       
     };
                 
@@ -137,12 +138,11 @@ function apiHandler() {
     } 
     
     symbol.forEach( (symb, idx, arr) => {    
-      let val = symb.toUpperCase();
-      
+      let val = symb.toUpperCase();     
       
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'];        
-       
+       console.log(stock)
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
           errIdx += idx + 1;
@@ -150,13 +150,13 @@ function apiHandler() {
         } else {  
              
           //let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          stockData.push({ 'stock': val, 'price': stock['05. price']});//, [likes]: 0 
+          stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
         }        
    
         let response;
         if(idx === arr.length-1) {
           
-            getLikes(symbol, function callback(db) {
+            getLikes(symbol, function callback(db, stocked) {
               console.log(symbol, db)
               if(arr.length === 1) {
                 response = error ? (
@@ -171,8 +171,8 @@ function apiHandler() {
                 // console.log(db, ticker)
                 // (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
                 // (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
-                response = stockData;   
-               
+                response = stocked;   
+               console.log(stocked);
                 return res.json({stockData : response})
               }
                          
