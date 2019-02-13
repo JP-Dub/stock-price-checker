@@ -87,9 +87,9 @@ suite('Functional Tests', function() {
            console.log('test' , res.body.stockData)
             assert.equal(res.status, 200);
             assert.isObject(res.body, 'should return and object');
-            assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
+            assert.propertyVal(res.body.stockData[0], 'stock', 'AMZN');
             assert.propertyVal(res.body.stockData[0], 'rel_likes', 0);
-            assert.propertyVal(res.body.stockData[1], 'stock', 'AMZN');
+            assert.propertyVal(res.body.stockData[1], 'stock', 'MGPI');
             assert.propertyVal(res.body.stockData[1], 'rel_likes', 0);
             done();
         });            
