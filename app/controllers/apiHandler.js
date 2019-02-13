@@ -77,17 +77,18 @@ function apiHandler() {
             
           });
       console.log('No log ip address');      
-      //callback('done');
     }; 
     
     const getLikes = (arr, callback) => {
       
          function findTicker(symbol, like) {
             let obj = {};
-            symbol.forEach(val => {   
-            let symb = val.toUpperCase();
-            ticker.push(symb)
-             var logged = false;
+            
+           symbol.forEach(val => {   
+             let symb   = val.toUpperCase(),
+                 logged = false;
+             ticker.push(symb)
+            
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
                  logged ? (
@@ -134,7 +135,7 @@ function apiHandler() {
     } 
     
     symbol.forEach( (symb, idx, arr) => {    
-      var val = symb.toUpperCase();
+      let val = symb.toUpperCase();
       
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'];        
@@ -156,6 +157,7 @@ function apiHandler() {
                 if(error) return res.json({stockData: stockData[0]});
                 stockData[0]['likes'] = db[val];
                 response = stockData[0];
+                
                 return res.json({stockData : response})
               } else {                 
                 (error === 1) ? false : stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]]|| 0;
