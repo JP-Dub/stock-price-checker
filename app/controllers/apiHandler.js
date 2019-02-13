@@ -86,9 +86,9 @@ function apiHandler() {
     const getLikes = (arr, callback) => {
       
          function findTicker(symbol, like) {
-           let obj = {};
-           
-           symbol.forEach(symb => {   
+            let obj = {};
+            symbol.forEach(val => {   
+            let symb = val.toUpperCase();
             ticker.push(symb)
              var logged = false;
              for(var i = 0; i < like.length; i++) {
@@ -102,6 +102,7 @@ function apiHandler() {
                };
              };
            });
+          
            return obj;
          };
     
@@ -155,7 +156,7 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db, ticker) {
-              //console.log(stockData, db, db[ticker[0]])
+              console.log(stockData, db, ticker)
               console.log(4)
               if(error) res.json({stockData: stockData});
               if(arr.length == 1) {
