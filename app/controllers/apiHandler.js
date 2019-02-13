@@ -98,8 +98,9 @@ function apiHandler() {
                };
              };
            });
-           stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;
-           stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
+           console.log(stockData)
+           !stockData[0].error ? stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0 : false;
+           stockData.length > 1 && !stockData[1].error  ? stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0 : false;
            return obj;
          };
     
@@ -151,23 +152,24 @@ function apiHandler() {
         }        
    
         let response;
-        if(idx === arr.length-1) {  
+        if(idx === arr.length-1) {
+          
             getLikes(symbol, function callback(db) {
-              console.log(symbol, db, ticker)
+              console.log(symbol, db)
               if(arr.length === 1) {
 
                 response = error ? (
                   stockData[0]
                   ):( 
-                  stockData[0].likes = db[val] || ticker[0], 
+                  stockData[0].likes = db[val] || 0, 
                   stockData[0]
                   );
                 console.log('response', response)
                 return res.json({stockData : response})
               } else {
-                console.log(db, ticker)
-                (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
-                (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
+                // console.log(db, ticker)
+                // (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
+                // (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
                 response = stockData;   
                
                 return res.json({stockData : response})
