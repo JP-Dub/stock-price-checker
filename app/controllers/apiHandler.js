@@ -13,6 +13,7 @@ function apiHandler() {
     //console.log(req.clientIp, req.query) 
      let stockData = [],
          ticker    = [],
+         error     = 0,
          symbol;
    
     const stockPrices = (symbol, done) =>{   
@@ -136,37 +137,31 @@ function apiHandler() {
       var val = symb.toUpperCase();
       
       stockPrices(val, function done(data) {
-        let stock    = data['Global Quote'],
-            objError = {error: 'Unable to find ticker'},
-            error = 0;
-        //console.log(1, val, idx) 
+        let stock    = data['Global Quote'];        
+       
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
           error++;
         } else {  
-        //console.log(2, val, idx)       
+             
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
           stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]: 0 });
-        }//else         
-        //console.log(3, val, idx)
+        }        
+   
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db, ticker) {
-              //console.log(stockData, db, ticker)
-              //console.log(4)
-              if(error) {
-                res.json({stockData: stockData});
-              } else
+
               if(arr.length == 1) {
+                if(error) return res.json({stockData: stockData[0]});
                 stockData[0]['likes'] = db[val];
                 response = stockData[0];
                 return res.json({stockData : response})
-              } else {     
-               // console.log(5, db, ticker)
-                stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]]|| 0;
-                stockData[1]['rel_likes'] = db[ticker[1]] - db[ticker[0]]|| 0;
+              } else {                 
+                (error === 1) ? false : stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]]|| 0;
+                (error === 2) ? false : stockData[1]['rel_likes'] = db[ticker[1]] - db[ticker[0]]|| 0;
                 response = stockData;   
-               // console.log(6)
+               
                 return res.json({stockData : response})
               }
                          
@@ -178,74 +173,3 @@ function apiHandler() {
 };
 
 module.exports = apiHandler;
-
-      //symbol.length > 0 ? stockData = 'rel_likes' : stockData = 'likes';
-
-        // if(!arr.length-1) {
-        //   stockData[idx]['likes'] = 1;
-        // } else {    
-        //   stockData[idx]['rel_likes'] = 0;              
-        // }
-
-/*
-      MongoClient.connect(CONNECTION_STRING,  { useNewUrlParser: true }, function(err, client) {
-        if(err) throw err;          
-
-        let db  = client.db('mlab'),
-        library = db.collection('stock-prices');
-        
-//         if(req.query.like) {
-//            //"98.254.191.29"
-//           var clientIp =  "100.255.191.29"
-//           library.findOne({userIp : clientIp }, function(err, ip) {
-//             if(err) throw err;
-
-//             if(!ip) {
-//               library.insertOne({userIp: clientIp, likes: arr}, (err, result) => {
-//                if(err) throw err;
-//                  //console.log('insertOne result', result);
-//                  //callback(result)
-//              });
-             
-//             } 
-            
-//           });
-//         }// if(req.query.like)
-        let arr = [];
-
-        library.find({}, (err, docs) => {
-            arr.push(docs.likes);                  
-            console.log(err, docs)                        
-           
-        })
-        console.log('arr', arr)
-      
-      }); // MongoClient()
-*/
-
-          // let ticker = stock['01. symbol'],
-          //     price  = stock['05. price'];
-          // let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          // stockData.push({ 'stock': ticker, 'price': price, [likes]:  0 });
-        
-        //}
-        // let ipQuery;
-        // if (idx === arr.length-1) {
-        //   if(req.query.like) {
-        //     queryIpDb(arr);
-        //   }
-            
-           
-          //getLikes(arr, function callback(db) {            
-           
-            
-            // let response;
-            // if(arr.length === 1) {
-            //   response = stockData[0];
-            //   response['likes'] = 0;
-            // } else {
-            //   stockData.forEach( (obj, index) => {
-            //     obj['rel_likes'] = 0;            
-            //   });
-            //   response = stockData;
-            // }
