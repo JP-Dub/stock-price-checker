@@ -69,12 +69,12 @@ suite('Functional Tests', function() {
       test('2 stocks', function(done) {
         chai.request(server)
           .get('/api/stock-prices')
-          .query({stock: ['MGPI', 'AMZN']})
+          .query({stock: ['GOOG', 'AMZN']})
           .end(function(err, res){
            console.log('test' , res.body.stockData)
             assert.equal(res.status, 200);
             assert.isObject(res.body, 'should return and object');
-            assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
+            assert.propertyVal(res.body.stockData[0], 'stock', 'GOOG');
             assert.propertyVal(res.body.stockData[1], 'stock', 'AMZN');
             done();
         });          

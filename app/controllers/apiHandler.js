@@ -172,11 +172,11 @@ function apiHandler() {
                // console.log('response', response)
                 return res.json({stockData : response})
               } else {
-                
-                if(stocked.stockData.length !== 2) {
-                await stocked;
-                return res.json({stockData : stocked})
-                }
+                console.log(stocked)
+                // if(stocked.length == 2) {
+                // await stocked;
+                return await res.json({stockData : stocked})
+               // }
                 
               }
                          
