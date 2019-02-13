@@ -157,8 +157,8 @@ function apiHandler() {
                 
                 return res.json({stockData : response})
               } else {                 
-                (error === 1) ? false : stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]] || 0;
-                (error === 2) ? false : stockData[1]['rel_likes'] = db[ticker[1]] - db[ticker[0]] || 0;
+                (error === 1) ? false : stockData[0].rel_likes = db[ticker[0]] - db[ticker[1]] || 0;
+                (error === 2) ? false : stockData[1].rel_likes = db[ticker[1]] - db[ticker[0]] || 0;
                 response = stockData;   
                
                 return res.json({stockData : response})
