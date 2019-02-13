@@ -153,12 +153,16 @@ function apiHandler() {
             getLikes(symbol, function callback(db, ticker) {
               console.log(db, ticker)
               if(arr.length == 1) {
-                if(error) return res.json({stockData: stockData[0]});
-                stockData[0].likes = db[val];
-                response = stockData[0];
+                (error) ? (
+                  response = stockData[0] 
+                ) : (
+                  stockData[0].likes = db[val],
+                  response = stockData[0]
+                );
                 
                 return res.json({stockData : response})
-              } else {                 
+              } else {
+                console.log(db, ticker)
                 (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
                 (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
                 response = stockData;   
