@@ -136,6 +136,7 @@ function apiHandler() {
     if(req.query.like) {
       queryIpDb(symbol);
     } 
+    
     var i = 0;
     while( i < symbol.length) {
       let symb = symbol[i],
@@ -147,7 +148,7 @@ function apiHandler() {
       
       stockPrices(val, async function done(data) {
         let stock    = await data['Global Quote'];        
-       //console.log(stock)
+      
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
           //errIdx += idx + 1;
