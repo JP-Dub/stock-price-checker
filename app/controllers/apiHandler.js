@@ -7,6 +7,7 @@ const apiKey      = process.env.API_KEY,
 function apiHandler() {
   
   this.getStocks = (req, res) => {
+    console.log(req.query)
      let stockData = [],
          ticker    = [],
          error     = 0,
@@ -58,7 +59,7 @@ function apiHandler() {
              upsert: true
            }, (err, userIp) => {
             if(err) throw err;
-            console.log('userIp', userIp)
+            //console.log('userIp', userIp)
             
             if(!userIp && req.query.like) {
               let user = new Stocks();
@@ -67,12 +68,12 @@ function apiHandler() {
                      
               user.save((err, res) => {
                 if(err) throw err;
-                console.log('log ip address', res)
+                console.log('log ip address')
               });  
             }
             
           });
-      console.log('No log ip address');      
+      console.log('duplicate ip address');      
     }; 
     
     const getLikes = (arr, callback) => {
