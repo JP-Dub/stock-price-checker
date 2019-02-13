@@ -79,13 +79,13 @@ function apiHandler() {
     const getLikes = (arr, callback) => {
       
          function findTicker(symbol, like) {
-            let obj = {};
+            let obj = {}, arr = [];
             
            symbol.forEach(val => {   
              let symb   = val.toUpperCase(),
                  logged = false;
-             ticker.push(symb)
-            
+             arr.push(symb)
+              
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
                  logged ? (
@@ -97,7 +97,9 @@ function apiHandler() {
                };
              };
            });
-           
+           ticker.push(obj[arr[0]] - obj[arr[1]])
+           ticker.push(obj[arr[1]] - obj[arr[0]])
+           console.log(arr)
            return obj;
          };
     
@@ -157,8 +159,8 @@ function apiHandler() {
                 
                 return res.json({stockData : response})
               } else {                 
-                (error === 1) ? false : stockData[0].rel_likes = (db[ticker[0]] - db[val]) || 0;
-                (error === 2) ? false : stockData[1].rel_likes = (db[val] - db[ticker[0]]) || 0;
+                (error === 1) ? false : stockData[0].rel_likes = ticker[0] || 0;//(db[ticker[0]] - db[val]) || 0;
+                (error === 2) ? false : stockData[1].rel_likes = ticker[1] || 0;//(db[val] - db[ticker[0]]) || 0;
                 response = stockData;   
                
                 return res.json({stockData : response})

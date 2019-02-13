@@ -70,7 +70,7 @@ suite('Functional Tests', function() {
         .get('/api/stock-prices')
         .query({stock: ['MGPI', 'AMZN']})
         .end(function(err, res){
-         console.log(res.body.stockData)
+         console.log('test' , res.body.stockData)
           assert.equal(res.status, 200);
           assert.isObject(res.body, 'should return and object');
           assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
@@ -84,7 +84,7 @@ suite('Functional Tests', function() {
         .get('/api/stock-prices')
         .query({stock: ['MGPI', 'AMZN'], like: true})
         .end(function(err, res){
-         console.log(res.body.stockData)
+         console.log('test' , res.body.stockData)
           assert.equal(res.status, 200);
           assert.isObject(res.body, 'should return and object');
           assert.propertyVal(res.body.stockData[0], 'stock', 'MGPI');
