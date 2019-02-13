@@ -21,5 +21,6 @@ module.exports = function (app) {
   
   app.route('/api/stock-prices')
     .get(apiHandler.getStocks)
+    .delete(apiHandler.deleteTestIpAddress);
     
 };

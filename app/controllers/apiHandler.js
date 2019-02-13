@@ -142,8 +142,8 @@ function apiHandler() {
           error++;
         } else {  
              
-          let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
-          stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]: 0 });
+          //let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
+          stockData.push({ 'stock': val, 'price': stock['05. price']});//, [likes]: 0 
         }        
    
         let response;
@@ -168,6 +168,15 @@ function apiHandler() {
         }   
       });//stockPrices
     });//symbol.forEach()   
+  };
+  
+  this.deleteTestIpAddress = (req, res) => {
+    Stocks
+      .findOneAndDelete({userIp: req.clientIp})
+      .exec(err => {
+        if(err) throw err;
+        return res.status(202).send('testIp deleted');
+    });
   };
 };
 
