@@ -98,9 +98,8 @@ function apiHandler() {
                };
              };
            });
-           ticker.push(obj[arr[0]] - obj[arr[1]]||0)
-           ticker.push(obj[arr[1]] - obj[arr[0]]||0)
-           //console.log(arr)
+           stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;
+           stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
            return obj;
          };
     
@@ -112,7 +111,7 @@ function apiHandler() {
              let like = [];
              likes.map(each => each['likes'].forEach(val => like.push(val))); 
                                
-             callback(findTicker(arr, like), ticker);        
+             callback(findTicker(arr, like));        
            });       
     };
                 
@@ -153,7 +152,7 @@ function apiHandler() {
    
         let response;
         if(idx === arr.length-1) {  
-            getLikes(symbol, function callback(db, ticker) {
+            getLikes(symbol, function callback(db) {
               console.log(symbol, db, ticker)
               if(arr.length === 1) {
 
