@@ -151,7 +151,7 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db, ticker) {
-              //console.log(db, ticker, val)
+              console.log(db, ticker)
               if(arr.length == 1) {
                 if(error) return res.json({stockData: stockData[0]});
                 stockData[0].likes = db[val];
