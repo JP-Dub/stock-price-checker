@@ -41,7 +41,7 @@ function apiHandler() {
         res.on('end', () => {
           try {
             const parsedData = JSON.parse(rawData);
-            done(parsedData);
+            return done(parsedData);
           } catch (e) {
             console.error(e.message);
           }
@@ -100,8 +100,8 @@ function apiHandler() {
            });
            
            if(stockData.length === 2) {
-             !stockData[0].error ? stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0 : false;        
-             !stockData[1].error ? stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0 : false;
+             if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;        
+             if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
            }
           
            return obj;
@@ -145,23 +145,22 @@ function apiHandler() {
     //symbol.forEach( (symb, idx, arr) => {    
       let val = symb.toUpperCase();     
       
-      stockPrices(val, function done(data) {
-        let stock    = data['Global Quote'];        
+      stockPrices(val, async function done(data) {
+        let stock    = await data['Global Quote'];        
        //console.log(stock)
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
-          errIdx += idx + 1;
+          //errIdx += idx + 1;
           error = true;
         } else {  
              
-          //let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
           stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
         }        
    
         let response;
         if(idx === arr.length-1) {
           
-            getLikes(symbol, function callback(db, stocked) {
+            getLikes(symbol, async function callback(db, stocked) {
               console.log(symbol, db)
               if(arr.length === 1) {
                 response = error ? (
@@ -173,12 +172,12 @@ function apiHandler() {
                // console.log('response', response)
                 return res.json({stockData : response})
               } else {
-                // console.log(db, ticker)
-                // (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
-                // (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
-                response = stocked;   
-               //console.log(stocked);
-                return res.json({stockData : response})
+                
+                if(stocked.stockData.length !== 2) {
+                await stocked;
+                return res.json({stockData : stocked})
+                }
+                
               }
                          
             });
