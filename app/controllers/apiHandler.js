@@ -12,7 +12,8 @@ function apiHandler() {
   this.getStocks = (req, res) => {
     //console.log(req.clientIp, req.query) 
      let stockData = [],
-         symbol;      
+         symbol;
+         let ticker = [];
     //let url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&apikey=' + apiKey
     const stockPrices = (symbol, done) =>{   
       let url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
@@ -88,7 +89,7 @@ function apiHandler() {
            let obj = {};
            
            symbol.forEach(symb => {   
-             //var symb = val.toUpperCase();
+            ticker.push(symb)
              var logged = false;
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
@@ -112,7 +113,7 @@ function apiHandler() {
              let like = [];
              likes.map(each => each['likes'].forEach(val => like.push(val))); 
                                
-             callback(findTicker(arr, like));        
+             callback(findTicker(arr, like), ticker);        
            });       
     };
                 
@@ -136,35 +137,37 @@ function apiHandler() {
     
     symbol.forEach( (symb, idx, arr) => {    
       var val = symb.toUpperCase();
-      let ticker = [];
-      ticker.push(val);
+      
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'],
             objError = {error: 'Unable to find ticker'},
             error = 0;
-         
+        console.log(1, val, idx) 
         if(isEmpty(stock)) {
-          stockData.push(objError);
+          stockData.push({error: 'Unable to find ticker'});
           error++;
         } else {  
-          //console.log(db)          
+        console.log(2, val, idx)       
           let likes = symbol.length === 1 ? 'likes' : 'rel_likes';  
           stockData.push({ 'stock': val, 'price': stock['05. price'], [likes]: 0 });
         }//else         
-        //console.log(stockData)
+        console.log(3, val, idx)
         let response;
         if(idx === arr.length-1) {  
-            getLikes(symbol, function callback(db) {
+            getLikes(symbol, function callback(db, ticker) {
               //console.log(stockData, db, db[ticker[0]])
+              console.log(4)
               if(error) res.json({stockData: stockData});
               if(arr.length == 1) {
                 stockData[0]['likes'] = db[val];
                 response = stockData[0];
                 return res.json({stockData : response})
-              } else {                
-                stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]];
-                stockData[1]['rel_likes'] = db[ticker[1]] - db[ticker[0]];
-                response = stockData;      
+              } else {     
+                console.log(5, db, ticker)
+                stockData[0]['rel_likes'] = db[ticker[0]] - db[ticker[1]]|| 0;
+                stockData[1]['rel_likes'] = db[ticker[1]] - db[ticker[0]]|| 0;
+                response = stockData;   
+                console.log(6)
                 return res.json({stockData : response})
               }
                          
