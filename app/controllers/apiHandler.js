@@ -148,7 +148,7 @@ function apiHandler() {
       
       stockPrices(val, async function done(data) {
         let stock    = await data['Global Quote'];        
-      
+        console.log( idx, stock)
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
           //errIdx += idx + 1;
@@ -173,7 +173,7 @@ function apiHandler() {
                // console.log('response', response)
                 return res.json({stockData : response})
               } else {
-                console.log(stocked)
+                //console.log(stocked)
                 // if(stocked.length == 2) {
                 // await stocked;
                 return await res.json({stockData : stocked})

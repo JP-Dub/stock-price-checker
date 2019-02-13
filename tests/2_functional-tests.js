@@ -64,7 +64,9 @@ suite('Functional Tests', function() {
           assert.equal(res.text, 'testIp deleted');
           done();
         });          
-      });      
+      }); 
+      
+      /* my api only allows 5 calls a minute had to comment this out */
       
       // test('2 stocks', function(done) {
       //   chai.request(server)
