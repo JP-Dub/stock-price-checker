@@ -136,13 +136,18 @@ function apiHandler() {
     if(req.query.like) {
       queryIpDb(symbol);
     } 
-    
-    symbol.forEach( (symb, idx, arr) => {    
+    var i = 0;
+    while( i < symbol.length) {
+      let symb = symbol[i],
+          idx  = i,
+          arr = symbol;
+      
+    //symbol.forEach( (symb, idx, arr) => {    
       let val = symb.toUpperCase();     
       
       stockPrices(val, function done(data) {
         let stock    = data['Global Quote'];        
-       console.log(stock)
+       //console.log(stock)
         if(isEmpty(stock)) {
           stockData.push({error: 'Unable to find ticker'});
           errIdx += idx + 1;
@@ -165,21 +170,22 @@ function apiHandler() {
                   stockData[0].likes = db[val] || 0, 
                   stockData[0]
                   );
-                console.log('response', response)
+               // console.log('response', response)
                 return res.json({stockData : response})
               } else {
                 // console.log(db, ticker)
                 // (error === 1) ? false : stockData[0].rel_likes = ticker[0];//(db[ticker[0]] - db[val]) || 0;
                 // (error === 2) ? false : stockData[1].rel_likes = ticker[1];//(db[val] - db[ticker[0]]) || 0;
                 response = stocked;   
-               console.log(stocked);
+               //console.log(stocked);
                 return res.json({stockData : response})
               }
                          
             });
         }   
       });//stockPrices
-    });//symbol.forEach()   
+      i++;
+    }//);//symbol.forEach()   
   };
   
   this.deleteTestIpAddress = (req, res) => {
