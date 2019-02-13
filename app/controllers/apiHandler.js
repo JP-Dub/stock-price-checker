@@ -97,7 +97,7 @@ function apiHandler() {
                };
              };
            });
-          
+           
            return obj;
          };
     
@@ -149,16 +149,16 @@ function apiHandler() {
         let response;
         if(idx === arr.length-1) {  
             getLikes(symbol, function callback(db, ticker) {
-              console.log(db, ticker)
+              console.log(db, ticker, val)
               if(arr.length == 1) {
                 if(error) return res.json({stockData: stockData[0]});
-                stockData[0]['likes'] = db[val];
+                stockData[0].likes = db[val];
                 response = stockData[0];
                 
                 return res.json({stockData : response})
               } else {                 
-                (error === 1) ? false : stockData[0].rel_likes = db[ticker[0]] - db[ticker[1]] || 0;
-                (error === 2) ? false : stockData[1].rel_likes = db[ticker[1]] - db[ticker[0]] || 0;
+                (error === 1) ? false : stockData[0].rel_likes = (db[ticker[0]] - db[val]) || 0;
+                (error === 2) ? false : stockData[1].rel_likes = (db[val] - db[ticker[0]]) || 0;
                 response = stockData;   
                
                 return res.json({stockData : response})
