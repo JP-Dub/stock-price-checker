@@ -127,42 +127,42 @@ function apiHandler() {
       checkForIp(symbol);
     } 
           
-    stockPrices(symbol[0], async function done(data) {
-      await isEmpty(data['Global Quote'], function(db) {
+    stockPrices(symbol[0], function done(data) {
+      isEmpty(data['Global Quote'], function(db) {
         console.log('1', stockData)
       }) 
       
       if(symbol.length === 2) { 
-        stockPrices(symbol[1], async function done(data) {
-          await isEmpty(data['Global Quote'], function(db) {
+        stockPrices(symbol[1], function done(data) {
+          isEmpty(data['Global Quote'], function(db) {
             console.log('2', stockData)
           });
         });
       }
-      
-      symbol.forEach( (symb, idx, arr) => {    
+    }); //stockPrices 
+    symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
         let response;
           
         getLikes(symbol, async function callback(db, stocked) {
              
-        if(arr.length === 1) {
-          response = error ? (
-            stockData[0]
-          ):( 
-            stockData[0].likes = db[val] || 0, 
-            await stockData[0]
-          );
-      
-          return await res.json({stockData : response})
+          if(arr.length === 1) {
+            response = error ? (
+              stockData[0]
+            ):( 
+              stockData[0].likes = db[val] || 0, 
+              await stockData[0]
+            );
+
+            return await res.json({stockData : response})
           } else {
-        
-                return await res.json({stockData : stocked})            
-              }
+
+            return await res.json({stockData : stocked})            
+          }
                          
-            });   
+        });   
      }); //symbol.forEach()  
-    }); //stockPrices
+    //}); //stockPrices
   };
   
   this.deleteTestIpAddress = (req, res) => {
