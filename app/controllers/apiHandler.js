@@ -127,28 +127,29 @@ function apiHandler() {
       checkForIp(symbol);
     } 
     
-    const checkStock = () => {
+    const checkStock = (cb) => {
 
        stockPrices(symbol[0],  function done(data) {
          isEmpty(data['Global Quote'],  function(db) {
           console.log('1', stockData)
-   
+           
         }) 
-      });
+      }).then( (stockData => {
 
       if(symbol.length === 2) { 
          stockPrices(symbol[1],  function done(data) {
            isEmpty(data['Global Quote'], function(db) {
             console.log('2', stockData)
-          
+          cb(stockData)
           });
         });
       }    
-      console.log('3')
+     
+    }))
     };
     
     checkStock(function cb(data) {
-      console.log(data)
+      console.log('callback', data)
     });
    
     
