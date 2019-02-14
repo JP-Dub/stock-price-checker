@@ -132,15 +132,15 @@ function apiHandler() {
        stockPrices(symbol[0],  function done(data) {
          isEmpty(data['Global Quote'],  function(db) {
           console.log('1', stockData)
-           cb(stockData)
+            if(symbol.length === 1) return cb(stockData);
         }) 
       }) //stockPrices
 
       if(symbol.length === 2) { 
          stockPrices(symbol[1],  function done(data) {
            isEmpty(data['Global Quote'], function(db) {
-            console.log('2', stockData)
-          cb(stockData)
+             console.log('2', stockData)
+             cb(stockData)
           });
         });
       }  // if()  
@@ -148,7 +148,8 @@ function apiHandler() {
     }// checkStock
     
     
-    checkStock(function cb(data) {
+    async function Something() {
+    function cb(data) {
       console.log('callback', data)
     });
    
