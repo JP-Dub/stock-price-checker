@@ -78,31 +78,24 @@ function apiHandler() {
     const getLikes = (arr, callback) => {
       
          function findTicker(symbol, like) {
-            let obj = {}, arr = [];
+           let obj = {}, arr = [];
+           
            symbol.forEach(val => {   
-             let symb   = val.toUpperCase(),
-                 logged = false;
-             arr.push(symb)
+             let symb   = val.toUpperCase();
+             arr.push(symb);
              obj[symb] = 0;
              
              for(var i = 0; i < like.length; i++) {
-               if(like[i] === symb) {
-                 //logged ? (
-                   obj[symb]++   
-                 //) : ( 
-                 //   obj[symb] = 1,
-                 //   logged = true
-                 // ) 
-         
-               } 
+               if(like[i] === symb) obj[symb]++;
              };
+             
            });
            
            if(stockData.length === 2) {
-             if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;        
-             if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
+             if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]);        
+             if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]);
            }
-           console.log(obj, stockData, arr)
+           console.log(stockData, obj, arr)
            return obj;
          };
     
@@ -131,14 +124,8 @@ function apiHandler() {
     if(req.query.like) {
       queryIpDb(symbol);
     } 
-    
-    var i = 0;
-    while( i < symbol.length) {
-      let symb = symbol[i],
-          idx  = i,
-          arr = symbol;
       
-    //symbol.forEach( (symb, idx, arr) => {    
+    symbol.forEach( (symb, idx, arr) => {    
       let val = symb.toUpperCase();     
       
       stockPrices(val, async function done(data) {
@@ -174,8 +161,8 @@ function apiHandler() {
             });
         }   
       });//stockPrices
-      i++;
-    }//);//symbol.forEach()   
+ 
+    });//symbol.forEach()   
   };
   
   this.deleteTestIpAddress = (req, res) => {
