@@ -83,16 +83,18 @@ function apiHandler() {
              let symb   = val.toUpperCase(),
                  logged = false;
              arr.push(symb)
-              
+             obj[symb] = 0;
+             
              for(var i = 0; i < like.length; i++) {
                if(like[i] === symb) {
-                 logged ? (
+                 //logged ? (
                    obj[symb]++   
-                 ) : ( 
-                   obj[symb] = 1,
-                   logged = true
-                 );
-               };
+                 //) : ( 
+                 //   obj[symb] = 1,
+                 //   logged = true
+                 // ) 
+         
+               } 
              };
            });
            
@@ -100,7 +102,7 @@ function apiHandler() {
              if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;        
              if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
            }
-           //console.log(obj, stockData, arr)
+           console.log(obj, stockData, arr)
            return obj;
          };
     
