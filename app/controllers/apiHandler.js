@@ -127,29 +127,28 @@ function apiHandler() {
       checkForIp(symbol);
     } 
     
-    const checkStock = (symb, skip) => {
+    //const checkStock = (symb) => {    
       
-      
-       stockPrices(symbol,  function done(data) {
-         isEmpty(data['Global Quote'],  function(db) {
-          console.log('1', stockData)
-           return stockData;
-        }) 
-      }) //stockPrices
+    stockPrices(symbol[0],  function done(data) {
+      isEmpty(data['Global Quote'],  function(db) {
+        console.log('1', stockData)
+        return stockData;
+      }) 
+  
 
-      if(symbol.length === 2) { 
-         stockPrices(symbol[1],  function done(data) {
-           isEmpty(data['Global Quote'], function(db) {
-             console.log('2', stockData)
-             return stockData;
-          });
+    if(symbol.length === 2) { 
+      stockPrices(symbol[1],  function done(data) {
+        isEmpty(data['Global Quote'], function(db) {
+          console.log('2', stockData)
+          return stockData;
         });
-      }  // if()  
+      });
+    }  // if()  
      
-    }// checkStock
+   // }// checkStock
     
-    const breakingSymbols = (res2) => {
-       console.log('res2', res2);
+    const breakingSymbols = () => {
+       
         symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
         let response;
@@ -175,9 +174,11 @@ function apiHandler() {
     }
     
  //symbol.forEach()  
-    //}); //stockPrices
-      //})
-
+    
+    
+    }); //stockPrices
+ 
+  }; // this.getStocks()
   
   this.deleteTestIpAddress = (req, res) => {
     Stocks
