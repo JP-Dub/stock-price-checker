@@ -132,9 +132,9 @@ function apiHandler() {
        stockPrices(symbol[0],  function done(data) {
          isEmpty(data['Global Quote'],  function(db) {
           console.log('1', stockData)
-           
+           cb(stockData)
         }) 
-      }).then( (stockData => {
+      }) //stockPrices
 
       if(symbol.length === 2) { 
          stockPrices(symbol[1],  function done(data) {
@@ -143,10 +143,10 @@ function apiHandler() {
           cb(stockData)
           });
         });
-      }    
+      }  // if()  
      
-    }))
-    };
+    }// checkStock
+    
     
     checkStock(function cb(data) {
       console.log('callback', data)
