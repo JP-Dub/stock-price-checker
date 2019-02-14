@@ -127,56 +127,49 @@ function apiHandler() {
       checkForIp(symbol);
     } 
     
-    //const checkStock = (symb) => {    
+    //const checkStock = () => {    
       
-    stockPrices(symbol[0],  function done(data) {
-      isEmpty(data['Global Quote'],  function(db) {
-        console.log('1', stockData)
-        return stockData;
-      }) 
-  
-
-    if(symbol.length === 2) { 
-      stockPrices(symbol[1],  function done(data) {
-        isEmpty(data['Global Quote'], function(db) {
-          console.log('2', stockData)
+    const stock1 = new Promise( (resolve, reject) => {
+      stockPrices(symbol[0],  function done(data) {
+        isEmpty(data['Global Quote'],  function(db) {
+          console.log('1', stockData)
           return stockData;
+        }); 
+      }); //stockPrices
+    });
+  
+      if(symbol.length === 2) { 
+        stockPrices(symbol[1],  function done(data) {
+          isEmpty(data['Global Quote'], function(db) {
+            console.log('2', stockData)
+            return stockData;
+          });
         });
-      });
-    }  // if()  
-     
-   // }// checkStock
-    
-    const breakingSymbols = () => {
-       
-        symbol.forEach( (symb, idx, arr) => {    
+      }  // if()  
+      
+      symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
         let response;
-          
-        getLikes(symbol, async function callback(db, stocked) {
-             
+
+        getLikes(symbol, function callback(db, stocked) {
+
           if(arr.length === 1) {
             response = error ? (
               stockData[0]
             ):( 
               stockData[0].likes = db[val] || 0, 
-              await stockData[0]
+               stockData[0]
             );
+              return  res.json({stockData : response})
+            } else {
 
-            return await res.json({stockData : response})
-          } else {
+              return  res.json({stockData : stocked})            
+            }
 
-            return await res.json({stockData : stocked})            
-          }
-                         
         });   
-     });
-    }
+      });// symbol.forEach()
     
- //symbol.forEach()  
-    
-    
-    }); //stockPrices
+
  
   }; // this.getStocks()
   
