@@ -24,7 +24,8 @@ app.use(helmet.contentSecurityPolicy({
     directives : {
         defaultSrc: ["'self'"],
         scriptSrc : ["'self'", "'unsafe-inline'", 'https://code.jquery.com'], 
-        styleSrc  : ["'self'", "'unsafe-inline'" ]     
+        styleSrc  : ["'self'", "'unsafe-inline'" ],
+        imgSrc    : ["'self'", "https://hyperdev.com/favicon-app.ico"]
     }
 }));
 

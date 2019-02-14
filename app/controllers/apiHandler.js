@@ -10,7 +10,8 @@ function apiHandler() {
      let stockData = [],
          ticker    = [],
          error     = false,
-         symbol;
+         symbol,
+         response;
    
     const stockPrices = (symbol, done) =>{   
       let url    = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=' + symbol + '&apikey=' + apiKey;
@@ -98,7 +99,7 @@ function apiHandler() {
              if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]);        
              if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]);
            }
-           //console.log('findTicker', stockData, obj, arr)
+           
            return obj;
          };
     
@@ -129,41 +130,35 @@ function apiHandler() {
     if(req.query.like) {
       checkForIp(symbol);
     } 
-      
-      
+           
     const stock1 = new Promise( (resolve, reject) => {
-      console.log('stock1')
-      //setTimeout(() => {
+  
         stockPrices(symbol[0],  function done(data) {
           isEmpty(data['Global Quote'],  function(db) {
             resolve();
           }); 
-        }); //stockPrices
-      //}, 1000)
+        }); 
+
     }); //end of Promise
     
     const stock2 = new Promise( (resolve, reject) => {
-      console.log('stock2')
       if(symbol.length === 2) { 
         setTimeout(() => {
+          
           stockPrices(symbol[1],  function done(data) {
             isEmpty(data['Global Quote'], function(db) {
               resolve();
             });
           });
+          
         }, 1000)
       }
-        //resolve()
-
-    });
+    }); // end of Promise
     
-    let response;
     const stock3 = new Promise( (resolve, reject) => {
-      console.log('stock3')
        setTimeout(() => {
         
-          symbol.forEach( (symb, idx, arr) => {  
-             
+          symbol.forEach( (symb, idx, arr) => {             
             let val = symb.toUpperCase();   
             
             if(idx === arr.length-1) {
@@ -178,9 +173,8 @@ function apiHandler() {
           })// symbol.forEach()
        
        }, 1500)
-    });
+    }); // end of Promise
     
-    //let results = (response) => res.json({stockData: response});
     function main() {
       Promise.all([stock1, stock2, stock3]).then()
     }
