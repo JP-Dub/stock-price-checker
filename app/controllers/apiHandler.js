@@ -95,7 +95,7 @@ function apiHandler() {
              if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]);        
              if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]);
            }
-           console.log(stockData, obj, arr)
+           console.log('findTicker', stockData, obj, arr)
            return obj;
          };
     
@@ -126,20 +126,31 @@ function apiHandler() {
     if(req.query.like) {
       checkForIp(symbol);
     } 
-          
-    stockPrices(symbol[0], function done(data) {
-      isEmpty(data['Global Quote'], function(db) {
-        console.log('1', stockData)
-      }) 
-      
+    
+    const checkStock = (symbol) => {
+       let one, two;   
+      stockPrices(symbol[0], function done(data) {
+        isEmpty(data['Global Quote'], function(db) {
+          console.log('1', stockData)
+          one = true;
+        }) 
+      });
+
       if(symbol.length === 2) { 
         stockPrices(symbol[1], function done(data) {
           isEmpty(data['Global Quote'], function(db) {
             console.log('2', stockData)
+            two = true;
           });
         });
       }
-    }); //stockPrices 
+      return [one, two]; 
+    };
+    
+    async function fetchData() {
+      let stock1 = await checkStock(symbol)
+      console.log('stock1', stock1)
+    
     symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
         let response;
@@ -163,6 +174,8 @@ function apiHandler() {
         });   
      }); //symbol.forEach()  
     //}); //stockPrices
+      }
+    fetchData();
   };
   
   this.deleteTestIpAddress = (req, res) => {
