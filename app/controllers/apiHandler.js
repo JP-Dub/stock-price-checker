@@ -49,7 +49,7 @@ function apiHandler() {
       }); // end of https request
     }; // end of stockPrices()
               
-    const queryIpDb = (arr, callback) => {
+    const checkForIp = (arr, callback) => {
 
           Stocks.findOne({
              userIp: req.clientIp
@@ -122,14 +122,22 @@ function apiHandler() {
                                    : symbol = [req.query.stock];
     
     if(req.query.like) {
-      queryIpDb(symbol);
+      checkForIp(symbol);
     } 
       
-    symbol.forEach( (symb, idx, arr) => {    
-      let val = symb.toUpperCase();     
+  
       
-      stockPrices(val, async function done(data) {
-        let stock    = await data['Global Quote']; 
+    stockPrices(symbol[0], async function done(data) {
+      let stock1 = await data['Global Quote'];
+      let stock2;
+      if(symbol.length === 2) { 
+        stockPrices(symbol[1], async function done(data) {
+        stock2 = await data['Global Quote'];  
+        });
+      }
+      
+      symbol.forEach( (symb, idx, arr) => {    
+      let val = symb.toUpperCase();   
         
         if(isEmpty(stock)) {
           await stockData.push({error: 'Unable to find ticker'});
