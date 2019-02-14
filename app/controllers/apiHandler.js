@@ -111,11 +111,13 @@ function apiHandler() {
            });       
     };
     
-    const isEmpty = (obj) => {
+    const isEmpty = (obj, callback) => {
       for(var key in obj) {
-        if(obj.hasOwnProperty(key)) return false;
+        if(obj.hasOwnProperty(key)) {
+          return callback(stockData.push({ 'stock': obj['01. symbol'], 'price': obj['05. price']}));
+        }     
       }
-      return true;
+      return callback(stockData.push({error: 'Unable to find ticker'}));
     };    
                 
     Array.isArray(req.query.stock) ? symbol = req.query.stock 
@@ -124,28 +126,23 @@ function apiHandler() {
     if(req.query.like) {
       checkForIp(symbol);
     } 
-      
-  
-      
+          
     stockPrices(symbol[0], async function done(data) {
-      let stock1 = await data['Global Quote'];
-      let stock2;
+      await isEmpty(data['Global Quote'], function(db) {
+        console.log('1', db)
+      }) 
+      
       if(symbol.length === 2) { 
         stockPrices(symbol[1], async function done(data) {
-        stock2 = await data['Global Quote'];  
+          await isEmpty(data['Global Quote'], function(db) {
+            console.log('2', db)
+          });
         });
       }
       
       symbol.forEach( (symb, idx, arr) => {    
       let val = symb.toUpperCase();   
-        
-        if(isEmpty(stock)) {
-          await stockData.push({error: 'Unable to find ticker'});
-          error = true;
-        } else {  
-             
-          await stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
-        }        
+     
    
         let response;
         if(idx === arr.length-1) {
@@ -181,6 +178,7 @@ function apiHandler() {
         return res.status(202).send('testIp deleted');
     });
   };
+    
 };
 
 module.exports = apiHandler;
@@ -191,3 +189,12 @@ module.exports = apiHandler;
                 //   stockData[0].likes = db[val],
                 //   response = stockData[0]
                 // );
+  
+          
+//         if(isEmpty(stock)) {
+//           await stockData.push({error: 'Unable to find ticker'});
+//           error = true;
+//         } else {  
+             
+//           await stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
+//         }   
