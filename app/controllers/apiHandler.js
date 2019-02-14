@@ -127,32 +127,32 @@ function apiHandler() {
       checkForIp(symbol);
     } 
     
-    const checkStock = (symbol) => {
+    const checkStock = async (symbol, callback) => {
       console.log(symbol)
        let one, two;   
-      stockPrices(symbol[0], async function done(data) {
-        await isEmpty(data['Global Quote'],  function(db) {
+       stockPrices(symbol[0],  function done(data) {
+         isEmpty(data['Global Quote'],  function(db) {
           console.log('1', stockData)
           one =  true;
         }) 
       });
 
       if(symbol.length === 2) { 
-        stockPrices(symbol[1], async function done(data) {
-          await isEmpty(data['Global Quote'], function(db) {
+         stockPrices(symbol[1],  function done(data) {
+           isEmpty(data['Global Quote'], function(db) {
             console.log('2', stockData)
             two =  true;
           });
         });
       }
-      if(one && two) {
-      return 'slow your roll';
-      }
+      
+      return await callback('slow your roll');
+      
     };
     
     checkStock(symbol, async function callback(db) {
      let results = await db;
-      console.log(db)
+      console.log('results', results)
     
     symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
