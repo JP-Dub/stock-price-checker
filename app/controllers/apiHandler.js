@@ -130,23 +130,35 @@ function apiHandler() {
     //const checkStock = () => {    
       
     const stock1 = new Promise( (resolve, reject) => {
-      stockPrices(symbol[0],  function done(data) {
-        isEmpty(data['Global Quote'],  function(db) {
-          console.log('1', stockData)
-          return stockData;
-        }); 
-      }); //stockPrices
-    });
-  
-      if(symbol.length === 2) { 
-        stockPrices(symbol[1],  function done(data) {
-          isEmpty(data['Global Quote'], function(db) {
-            console.log('2', stockData)
-            return stockData;
+      setTimeout(() => {
+        stockPrices(symbol[0],  function done(data) {
+          isEmpty(data['Global Quote'],  function(db) {
+            console.log('1', stockData)
+            resolve(stockData);
+          }); 
+        }); //stockPrices
+      }, 2000)
+    }); //end of Promise
+    
+    const stock2 = new Promise( (resolve, reject) => {
+      symbol.length === 2 ? ( 
+        setTimeout(() => {
+          stockPrices(symbol[1],  function done(data) {
+            isEmpty(data['Global Quote'], function(db) {
+              console.log('2', stockData)
+              resolve(stockData);
+            });
           });
-        });
-      }  // if()  
+        }, 2000)
+      ):(
+        resolve(null)
+      )
+    });
       
+    const stock3 
+    function main() {
+      Promise.all([stock1, stock2]).then(
+    
       symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
         let response;
@@ -167,8 +179,11 @@ function apiHandler() {
             }
 
         });   
-      });// symbol.forEach()
-    
+      })// symbol.forEach()
+        
+     )
+    }
+    main();
 
  
   }; // this.getStocks()
