@@ -101,7 +101,7 @@ function apiHandler() {
              if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;        
              if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
            }
-          
+           console.log(obj, stockData, arr)
            return obj;
          };
     
@@ -124,12 +124,8 @@ function apiHandler() {
       return true;
     };    
                 
-    Array.isArray(req.query.stock) ? (
-      symbol = req.query.stock 
-      ):(
-      symbol = [], 
-      symbol.push(req.query.stock)
-      );
+    Array.isArray(req.query.stock) ? symbol = req.query.stock 
+                                   : symbol = [req.query.stock];
     
     if(req.query.like) {
       queryIpDb(symbol);
@@ -159,7 +155,7 @@ function apiHandler() {
         if(idx === arr.length-1) {
           
             getLikes(symbol, async function callback(db, stocked) {
-              
+             
               if(arr.length === 1) {
                 response = error ? (
                   stockData[0]
@@ -170,7 +166,7 @@ function apiHandler() {
       
                 return await res.json({stockData : response})
               } else {
-
+        
                 return await res.json({stockData : stocked})            
               }
                          
