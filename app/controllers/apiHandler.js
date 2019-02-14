@@ -91,11 +91,14 @@ function apiHandler() {
              
            });
            
+           if(stockData.length === 1) {
+             if(!stockData[0].error) stockData[0].likes = obj[arr[0]];
+           }
            if(stockData.length === 2) {
              if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]);        
              if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]);
            }
-           console.log('findTicker', stockData, obj, arr)
+           //console.log('findTicker', stockData, obj, arr)
            return obj;
          };
     
@@ -146,51 +149,54 @@ function apiHandler() {
       console.log('stock2')
       symbol.length === 2 ? ( 
         setTimeout(() => {
-          console.log('stock2', resolve)
+          //console.log('stock2', resolve)
           stockPrices(symbol[1],  function done(data) {
             isEmpty(data['Global Quote'], function(db) {
-              console.log('2', stockData)
+              //console.log('2', stockData)
               resolve();
             });
           });
         }, 1500)
       ):(
-        resolve(null)
+        resolve()
       )
     });
+    
     let response;
     const stock3 = new Promise( (resolve, reject) => {
       console.log('stock3')
        setTimeout(() => {
-         //console.log('stock3', resolve)
+         console.log('stock3', resolve)
           symbol.forEach( (symb, idx, arr) => {    
             let val = symb.toUpperCase();   
             
 
             getLikes(symbol, function callback(db, stocked) {
-console.log('stocked', stocked)
+       console.log('stocked', stocked)
               if(symbol.length === 1) {
-                response = error ? (
-                  stockData[0]
-                ):( 
-                  stockData[0].likes = db[val] || 0, 
-                   stockData[0]
-                );
-                
+                // response = error ? (
+                //   stocked[0]
+                // ):( 
+                //   stocked[0].likes = db[val] || 0, 
+                //   stocked[0]
+                // );
+                  response = stocked[0];
                   //return  res.json({stockData : response})
-                resolve()
+                  //resolve()
                 } else {
                   response = stocked;
                   //return  res.json({stockData : stocked})            
-                  resolve()
+                  //resolve()
                 }
+              res.json({stockData: response});
+              resolve();
             });   
           })// symbol.forEach()
        
        }, 2000)
     });
     
-    let results = (response) => res.json({stockData: response});
+    //let results = (response) => res.json({stockData: response});
     function main() {
       Promise.all([stock1, stock2, stock3]).then(
     
@@ -215,7 +221,7 @@ console.log('stocked', stocked)
 
 //         });   
 //       })// symbol.forEach()
-        results
+       // results(response)
      )
     }
     main();
