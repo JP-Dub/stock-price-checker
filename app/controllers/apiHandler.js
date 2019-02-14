@@ -79,7 +79,6 @@ function apiHandler() {
       
          function findTicker(symbol, like) {
             let obj = {}, arr = [];
-            
            symbol.forEach(val => {   
              let symb   = val.toUpperCase(),
                  logged = false;
@@ -101,7 +100,7 @@ function apiHandler() {
              if(!stockData[0].error) stockData[0].rel_likes = (obj[arr[0]] - obj[arr[1]]) || 0;        
              if(!stockData[1].error) stockData[1].rel_likes = (obj[arr[1]] - obj[arr[0]]) || 0;
            }
-           console.log(obj, stockData, arr)
+           //console.log(obj, stockData, arr)
            return obj;
          };
     
