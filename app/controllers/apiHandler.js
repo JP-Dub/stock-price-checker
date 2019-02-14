@@ -165,9 +165,9 @@ function apiHandler() {
               getLikes(symbol, function callback(db, stocked) {
                 symbol.length === 1 ? response = stocked[0]
                                     : response = stocked;
-
+                resolve(response);
                 res.json({stockData: response});
-                resolve();
+                
               });   
             }
           })// symbol.forEach()
@@ -176,7 +176,7 @@ function apiHandler() {
     }); // end of Promise
     
     function main() {
-      Promise.all([stock1, stock2, stock3]).then()
+      Promise.all([stock1, stock2, stock3]).then((response) => console.log(response))
     }
     main();
 
