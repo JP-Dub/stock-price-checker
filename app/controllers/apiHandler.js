@@ -194,20 +194,4 @@ function apiHandler() {
     
 };
 
-module.exports = apiHandler;
-
-                // (error) ? (
-                //   response = stockData[0] 
-                // ) : (
-                //   stockData[0].likes = db[val],
-                //   response = stockData[0]
-                // );
-  
-          
-//         if(isEmpty(stock)) {
-//           await stockData.push({error: 'Unable to find ticker'});
-//           error = true;
-//         } else {  
-             
-//           await stockData.push({ 'stock': val||null, 'price': stock['05. price']||null});//, [likes]: 0 
-//         }   
+module.exports = apiHandler; 
