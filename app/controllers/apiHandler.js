@@ -154,33 +154,61 @@ function apiHandler() {
         resolve(null)
       )
     });
-      
-    const stock3 
-    function main() {
-      Promise.all([stock1, stock2]).then(
+    let response;
+    const stock3 = new Promise( (resolve, reject) => {
+       setTimeout(() => {
+          symbol.forEach( (symb, idx, arr) => {    
+            let val = symb.toUpperCase();   
+            
+
+            getLikes(symbol, function callback(db, stocked) {
+
+              if(arr.length === 1) {
+                response = error ? (
+                  stockData[0]
+                ):( 
+                  stockData[0].likes = db[val] || 0, 
+                   stockData[0]
+                );
+                  //return  res.json({stockData : response})
+                resolve(response)
+                } else {
+                  response = stocked;
+                  //return  res.json({stockData : stocked})            
+                  resolve(response)
+                }
+            });   
+          })// symbol.forEach()
+       
+       }, 2000)
+    });
     
-      symbol.forEach( (symb, idx, arr) => {    
-        let val = symb.toUpperCase();   
-        let response;
+    let results = (response) => res.json({stockData: response});
+    function main() {
+      Promise.all([stock1, stock2, stock3]).then(
+    
+//       symbol.forEach( (symb, idx, arr) => {    
+//         let val = symb.toUpperCase();   
+//         let response;
 
-        getLikes(symbol, function callback(db, stocked) {
+//         getLikes(symbol, function callback(db, stocked) {
 
-          if(arr.length === 1) {
-            response = error ? (
-              stockData[0]
-            ):( 
-              stockData[0].likes = db[val] || 0, 
-               stockData[0]
-            );
-              return  res.json({stockData : response})
-            } else {
+//           if(arr.length === 1) {
+//             response = error ? (
+//               stockData[0]
+//             ):( 
+//               stockData[0].likes = db[val] || 0, 
+//                stockData[0]
+//             );
+//               return  res.json({stockData : response})
+//             } else {
 
-              return  res.json({stockData : stocked})            
-            }
+//               return  res.json({stockData : stocked})            
+//             }
 
-        });   
-      })// symbol.forEach()
-        
+//         });   
+//       })// symbol.forEach()
+        results
      )
     }
     main();
