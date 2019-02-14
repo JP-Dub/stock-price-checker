@@ -147,7 +147,7 @@ function apiHandler() {
     
     const stock2 = new Promise( (resolve, reject) => {
       console.log('stock2')
-      symbol.length === 2 ? ( 
+      if(symbol.length === 2) { 
         setTimeout(() => {
           //console.log('stock2', resolve)
           stockPrices(symbol[1],  function done(data) {
@@ -157,40 +157,33 @@ function apiHandler() {
             });
           });
         }, 1500)
-      ):(
-        resolve()
-      )
+        }//:(
+        //resolve()
+      //)
     });
     
     let response;
     const stock3 = new Promise( (resolve, reject) => {
       console.log('stock3')
        setTimeout(() => {
-         console.log('stock3', resolve)
-          symbol.forEach( (symb, idx, arr) => {    
+        
+          symbol.forEach( (symb, idx, arr) => {  
+             
             let val = symb.toUpperCase();   
             
+            if(idx === arr.length-1) {
+              getLikes(symbol, function callback(db, stocked) {
+                console.log('stocked', stocked)
+                symbol.length === 1 ? response = stocked[0]
+                                    :    
+                  
+                    response = stocked;
 
-            getLikes(symbol, function callback(db, stocked) {
-       console.log('stocked', stocked)
-              if(symbol.length === 1) {
-                // response = error ? (
-                //   stocked[0]
-                // ):( 
-                //   stocked[0].likes = db[val] || 0, 
-                //   stocked[0]
-                // );
-                  response = stocked[0];
-                  //return  res.json({stockData : response})
-                  //resolve()
-                } else {
-                  response = stocked;
-                  //return  res.json({stockData : stocked})            
-                  //resolve()
-                }
-              res.json({stockData: response});
-              resolve();
-            });   
+                  }
+                res.json({stockData: response});
+                resolve();
+              });   
+            }
           })// symbol.forEach()
        
        }, 2000)
@@ -198,31 +191,7 @@ function apiHandler() {
     
     //let results = (response) => res.json({stockData: response});
     function main() {
-      Promise.all([stock1, stock2, stock3]).then(
-    
-//       symbol.forEach( (symb, idx, arr) => {    
-//         let val = symb.toUpperCase();   
-//         let response;
-
-//         getLikes(symbol, function callback(db, stocked) {
-
-//           if(arr.length === 1) {
-//             response = error ? (
-//               stockData[0]
-//             ):( 
-//               stockData[0].likes = db[val] || 0, 
-//                stockData[0]
-//             );
-//               return  res.json({stockData : response})
-//             } else {
-
-//               return  res.json({stockData : stocked})            
-//             }
-
-//         });   
-//       })// symbol.forEach()
-       // results(response)
-     )
+      Promise.all([stock1, stock2, stock3]).then()
     }
     main();
 
