@@ -127,34 +127,29 @@ function apiHandler() {
       checkForIp(symbol);
     } 
     
-    const checkStock = (cb) => {
+    const checkStock = (symbol, cb) => {
 
-       stockPrices(symbol[0],  function done(data) {
+       stockPrices(symbol,  function done(data) {
          isEmpty(data['Global Quote'],  function(db) {
           console.log('1', stockData)
-            if(symbol.length === 1) return cb(stockData);
+           callback(stockData);
         }) 
       }) //stockPrices
 
-      if(symbol.length === 2) { 
-         stockPrices(symbol[1],  function done(data) {
-           isEmpty(data['Global Quote'], function(db) {
-             console.log('2', stockData)
-             cb(stockData)
-          });
-        });
-      }  // if()  
+      // if(symbol.length === 2) { 
+      //    stockPrices(symbol[1],  function done(data) {
+      //      isEmpty(data['Global Quote'], function(db) {
+      //        console.log('2', stockData)
+      //        return stockData;
+      //     });
+      //   });
+      // }  // if()  
      
     }// checkStock
     
-    
-    async function Something() {
-    function cb(data) {
-      console.log('callback', data)
-    });
-   
-    
-    symbol.forEach( (symb, idx, arr) => {    
+    const breakingSymbols = (res) => {
+       console.log('res', res);
+        symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
         let response;
           
@@ -175,10 +170,23 @@ function apiHandler() {
           }
                          
         });   
-     }); //symbol.forEach()  
+     });
+    }
+    
+    async function Something() {
+      try {
+       const res = await checkStock(symbol[0])
+       const newRes = await breakingSymbols(res);
+    
+ //symbol.forEach()  
     //}); //stockPrices
       //})
-   
+        console.log(res, newRes)
+      } catch (error) {
+      console.log(error);
+      }
+    }// async
+    Something(symbol)
   };
   
   this.deleteTestIpAddress = (req, res) => {
