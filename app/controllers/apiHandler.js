@@ -130,52 +130,59 @@ function apiHandler() {
     //const checkStock = () => {    
       
     const stock1 = new Promise( (resolve, reject) => {
+      console.log('stock1')
       setTimeout(() => {
+        console.log('stock1', resolve)
         stockPrices(symbol[0],  function done(data) {
           isEmpty(data['Global Quote'],  function(db) {
-            console.log('1', stockData)
-            resolve(stockData);
+            //console.log('1', stockData)
+            resolve();
           }); 
         }); //stockPrices
-      }, 2000)
+      }, 1000)
     }); //end of Promise
     
     const stock2 = new Promise( (resolve, reject) => {
+      console.log('stock2')
       symbol.length === 2 ? ( 
         setTimeout(() => {
+          console.log('stock2', resolve)
           stockPrices(symbol[1],  function done(data) {
             isEmpty(data['Global Quote'], function(db) {
               console.log('2', stockData)
-              resolve(stockData);
+              resolve();
             });
           });
-        }, 2000)
+        }, 1500)
       ):(
         resolve(null)
       )
     });
     let response;
     const stock3 = new Promise( (resolve, reject) => {
+      console.log('stock3')
        setTimeout(() => {
+         //console.log('stock3', resolve)
           symbol.forEach( (symb, idx, arr) => {    
             let val = symb.toUpperCase();   
             
 
             getLikes(symbol, function callback(db, stocked) {
-
-              if(arr.length === 1) {
+console.log('stocked', stocked)
+              if(symbol.length === 1) {
                 response = error ? (
                   stockData[0]
                 ):( 
                   stockData[0].likes = db[val] || 0, 
                    stockData[0]
                 );
+                
                   //return  res.json({stockData : response})
-                resolve(response)
+                resolve()
                 } else {
                   response = stocked;
                   //return  res.json({stockData : stocked})            
-                  resolve(response)
+                  resolve()
                 }
             });   
           })// symbol.forEach()
