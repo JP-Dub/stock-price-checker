@@ -116,6 +116,13 @@ function apiHandler() {
              callback(findTicker(arr, like), stockData);        
            });       
     };
+    
+    const isEmpty = (obj) => {
+      for(var key in obj) {
+        if(obj.hasOwnProperty(key)) return false;
+      }
+      return true;
+    };    
                 
     Array.isArray(req.query.stock) ? (
       symbol = req.query.stock 
@@ -123,13 +130,6 @@ function apiHandler() {
       symbol = [], 
       symbol.push(req.query.stock)
       );
-    
-    function isEmpty(obj) {
-      for(var key in obj) {
-        if(obj.hasOwnProperty(key)) return false;
-      }
-      return true;
-    };
     
     if(req.query.like) {
       queryIpDb(symbol);
