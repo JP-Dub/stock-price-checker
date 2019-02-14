@@ -127,13 +127,12 @@ function apiHandler() {
       checkForIp(symbol);
     } 
     
-    const checkStock = async (symbol, callback) => {
-      console.log(symbol)
-       let one, two;   
+    const checkStock = () => {
+
        stockPrices(symbol[0],  function done(data) {
          isEmpty(data['Global Quote'],  function(db) {
           console.log('1', stockData)
-          one =  true;
+   
         }) 
       });
 
@@ -141,18 +140,17 @@ function apiHandler() {
          stockPrices(symbol[1],  function done(data) {
            isEmpty(data['Global Quote'], function(db) {
             console.log('2', stockData)
-            two =  true;
+          
           });
         });
-      }
-      
-      return await callback('slow your roll');
-      
+      }    
+      console.log('3')
     };
     
-    checkStock(symbol, async function callback(db) {
-     let results = await db;
-      console.log('results', results)
+    checkStock(function cb(data) {
+      console.log(data)
+    });
+   
     
     symbol.forEach( (symb, idx, arr) => {    
         let val = symb.toUpperCase();   
@@ -177,7 +175,7 @@ function apiHandler() {
         });   
      }); //symbol.forEach()  
     //}); //stockPrices
-      })
+      //})
    
   };
   
