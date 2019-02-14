@@ -129,37 +129,32 @@ function apiHandler() {
     if(req.query.like) {
       checkForIp(symbol);
     } 
-    
-    //const checkStock = () => {    
+      
       
     const stock1 = new Promise( (resolve, reject) => {
       console.log('stock1')
-      setTimeout(() => {
-        console.log('stock1', resolve)
+      //setTimeout(() => {
         stockPrices(symbol[0],  function done(data) {
           isEmpty(data['Global Quote'],  function(db) {
-            //console.log('1', stockData)
             resolve();
           }); 
         }); //stockPrices
-      }, 1000)
+      //}, 1000)
     }); //end of Promise
     
     const stock2 = new Promise( (resolve, reject) => {
       console.log('stock2')
       if(symbol.length === 2) { 
         setTimeout(() => {
-          //console.log('stock2', resolve)
           stockPrices(symbol[1],  function done(data) {
             isEmpty(data['Global Quote'], function(db) {
-              //console.log('2', stockData)
               resolve();
             });
           });
-        }, 1500)
-        }//:(
+        }, 1000)
+      }
         //resolve()
-      //)
+
     });
     
     let response;
@@ -173,20 +168,16 @@ function apiHandler() {
             
             if(idx === arr.length-1) {
               getLikes(symbol, function callback(db, stocked) {
-                console.log('stocked', stocked)
                 symbol.length === 1 ? response = stocked[0]
-                                    :    
-                  
-                    response = stocked;
+                                    : response = stocked;
 
-                  }
                 res.json({stockData: response});
                 resolve();
               });   
             }
           })// symbol.forEach()
        
-       }, 2000)
+       }, 1500)
     });
     
     //let results = (response) => res.json({stockData: response});
